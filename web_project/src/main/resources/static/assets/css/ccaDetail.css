@@ -1,0 +1,355 @@
+@import "without-sidebar.css";
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css);
+
+/* 페이지 헤더 높이 줄이기 */
+
+.page-header {
+  min-height: 20vh;
+}
+
+/* 상담글 섹션 설정 */
+.question-area {
+  width: 900px;
+  /* border: 1px solid darkgrey; */
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.19), 0 15px 15px rgba(0, 0, 0, 0.23);
+  padding: 30px;
+  margin: 0 auto;
+  border-radius: 20px;
+}
+
+.question-area>h3 {
+  font-size: 30px;
+  font-weight: 500;
+  color: black;
+  margin-top: 10px;
+}
+
+.question-area .userInfo {
+  height: 30px;
+  margin-bottom: 25px;
+}
+
+.question-area .userInfo .infoItem {
+  font-size: 15px;
+  color: #979393;
+  margin-right: 15px;
+}
+
+.question-area .questionDetail {}
+
+.question-area .questionDetail p {
+  font-size: 18px;
+  color: black;
+  white-space: pre-line;
+}
+
+.question-area .productCategory {
+  height: 40px;
+  margin-top: 30px;
+}
+
+.question-area .productCategory span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 312px;
+  margin: 0 4px 10px 0;
+  padding: 0 9px;
+  color: #666;
+  background-color: #f5f6f7;
+  border-radius: 100px;
+  font-size: 14px;
+  line-height: 30px;
+  vertical-align: top;
+}
+
+.question-area .buttonArea {
+  display: flex;
+  width: 100%;
+  margin-top: 10px;
+  align-items: center;
+}
+
+/* 답변달기 섹션 */
+.editorHeader {
+  height: 80px;
+  width: 900px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+
+.editorHeader .editorHeaderArea {
+  /* border: 1px solid #e5e5e5; */
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.19), 0 15px 15px rgba(0, 0, 0, 0.23);
+  border-radius: 20px;
+  margin-top: 100px;
+}
+
+.editorHeader .editorHeaderInner {
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  padding: 19px 30px;
+  -ms-flex-align: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.editorHeader .editorHeaderInner .thumbnail {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #d3d3d3;
+  overflow: hidden;
+}
+
+.editorHeader .editorHeaderInner .thumbnail img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.editorHeader .editorHeaderInner .headerDetail {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.editorHeader .editorHeaderInner .headerText {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: -0.3px;
+}
+
+.ans-btn {
+  padding: 10px 17px;
+  color: #fff;
+  background-color: #10538a;
+  border-radius: 20px;
+  font-size: 16px;
+  line-height: 18px;
+  letter-spacing: -0.3px;
+  vertical-align: top;
+  border: none;
+  transition: 0.2s;
+  margin-right: 10px;
+}
+
+.ans-btn:hover {
+  color: #fff;
+  padding: 12px 20px;
+  box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
+  font-weight: 500;
+}
+
+/* 답변 섹션 설정 */
+.answer-area {
+  width: 900px;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.19), 0 15px 15px rgba(0, 0, 0, 0.23);
+  padding: 30px;
+  margin: 0 auto;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.answer-area .answerHeader {
+  border-bottom: 1px solid rgba(233, 233, 236, 0.5);
+}
+
+.answerHeader .titleSection .titleArea {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  height: 57px;
+}
+
+.answerHeader .titleSection .titleArea .title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.answerHeader .titleSection .titleArea .option {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 9px;
+}
+
+.dropdownBtn {
+  position: relative;
+  display: inline-block;
+  padding: 0 8px;
+  color: #666;
+  font-size: 16px;
+  line-height: 30px;
+  border: none;
+}
+
+.answerList {
+  margin-bottom: 150px;
+}
+
+.answerList:last-child {
+  margin-bottom: 10px;
+}
+
+.answerDetailArea .profileCard {
+  background-color: #e7f3fc;
+  border-radius: 20px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.answerDetailArea .profileCard .cardInfo {
+  position: relative;
+  display: table;
+  width: 100%;
+  min-height: 68px;
+  table-layout: fixed;
+  box-sizing: border-box;
+}
+
+.cardInfo .thumbnailArea {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardInfo .thumbnailArea .thumbnail {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #cedcff;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.cardInfo .thumbnailArea .thumbnail img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cardInfo .profileInfo {
+  display: table-cell;
+  width: 100%;
+  padding: 0 12px 0 80px;
+  vertical-align: middle;
+}
+
+.profileInfo .nameArea {
+  margin: 0;
+  padding: 0;
+}
+
+.profileInfo .nameArea .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  color: #333;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: -0.3px;
+  font-weight: bold;
+}
+
+.profileInfo .companyArea {
+  margin-top: 5px;
+}
+
+.profileInfo .companyArea,
+.profileInfo .CCAproductCategory {
+  display: inline-block;
+}
+
+.profileInfo .companyArea .company,
+.profileInfo .CCAproductCategory .company {
+  position: relative;
+  display: inline-block;
+  padding: 3px 6px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  background-color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 13px;
+  vertical-align: top;
+  color: #4c567a;
+}
+
+.answerDetailArea .answerDetail {
+  margin-top: 24px;
+  padding-bottom: 30px;
+  line-height: 27px;
+  font-size: 17px;
+  color: #333;
+  letter-spacing: -0.3px;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+.answerDetailArea .answerDetail p {
+  font-size: 18px;
+  color: black;
+  white-space: pre-line;
+}
+
+.answerDetailArea .answerInfo {
+  margin-top: 26px;
+}
+
+.answerDate {
+  color: #939396;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.3px;
+}
+
+.answerDetailArea .answerBtnArea {
+  display: flex;
+  width: 100%;
+  margin-top: 36px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.likeArea {
+  display: flex;
+  align-items: flex-end;
+}
+
+.answerDetailArea .answerBtnArea .thumbsUp {
+  background: url(../../images/thumbs-up1.png);
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  margin: 10px;
+}
+
+.answerBtnArea .likeCount {
+  padding: 10px;
+  color: #000;
+  font-size: 15px;
+  font-weight: 500;
+  padding-right: 0;
+}

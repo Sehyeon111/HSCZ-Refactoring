@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--font-->
+  <link href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css" rel="stylesheet" type="text/css" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!--css-->
+  <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+  <link th:href="@{/assets/css/with-sidebar.css}" rel="stylesheet" />
+
+  <link th:href="@{/assets/demo/demo.css}" rel="stylesheet" />
+
+  <!-- Resources -->
+  <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+  <title>원산지결정기준</title>
+  <style>
+    body {
+      font-size: medium;
+      color: black;
+    }
+
+    .content {
+      width: 85%;
+      padding: 15px;
+    }
+
+    table {
+      text-align: center;
+      width: 90%;
+      margin: 10px;
+    }
+
+    th {
+      background-color: #0c0726;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top navbar-transparent" color-on-scroll="300">
+    <div class="container">
+      <div class="navbar-translate">
+        <a class="navbar-brand" th:href="@{/}" rel="tooltip" data-placement="bottom">
+          <img th:src="@{/images/web-logo9.png}" alt="로고" />
+        </a>
+      </div>
+      <div class="collapse navbar-collapse justify-content-end" id="navigation">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/news}">
+              무역뉴스
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/info/infoList}">
+              FTA정보
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/trade/showStat}">
+              무역통계
+            </a>
+          </li>
+
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" href="#" role="button"
+              aria-haspopup="true" aria-expanded="false">관세사상담</a>
+            <ul class="dropdown-menu dropdown-info" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" th:href="@{/cca/ccaList}">관세사목록</a>
+              <a class="dropdown-item" th:href="@{/cca/boardList}">상담목록</a>
+              <a class="dropdown-item" th:href="@{/cca/ccaWrite}">상담하기</a>
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+
+  <!-- page-header 시작-->
+  <div class="page-header section-dark" th:style="'background-image: url(\'' + @{/images/fta-header.jpg} + '\')'">
+    <div class="filter"></div>
+    <div class="content-center">
+      <div class="container">
+        <div class="title-brand">
+          <h1 class="presentation-title">원산지결정기준</h1>
+          <h3 class="presentation-subtitle"></h3>
+        </div>
+      </div> <!--div.content-center-->
+    </div>
+    <!--div.content-center-->
+  </div>
+  </div>
+  <!-- End page-header -->
+
+  <!-- 왼쪽 사이드바 -->
+  <section id="menubar">
+    <div id="menubar-nav">
+      <ul>
+        <li><a th:href="@{/info/infoList}">FTA정보</a></li>
+        <li class="active">
+          <a th:href="@{/info/origin}">원산지결정기준</a>
+        </li>
+        <li><a th:href="@{/info/country}">FTA협정국</a></li>
+        <li><a th:href="@{/info/tarrifrate}">세율정보</a></li>
+        <li><a th:href="@{/info/export_utilization}">수출활용정보</a></li>
+        <li><a th:href="@{/info/import_utilization}">수입활용정보</a></li>
+      </ul>
+    </div>
+  </section>
+  <!-- 왼쪽 사이드바 End-->
+
+  <!-- side-bar 시작-->
+  <nav class="main-menu">
+    <div class="settings"></div>
+    <div class="scrollbar" id="style-1">
+      <ul>
+        <li class="menu-img">
+          <a href="#">
+            <i class="fa fa-solid fa-bars fa-lg"></i>
+            <span class="nav-text">Menu</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/news}">
+            <i class="fa fa-solid fa-newspaper fa-lg"></i>
+            <span class="nav-text">무역뉴스</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/info/infoList}">
+            <i class="fa fa-solid fa-book fa-lg"></i>
+            <span class="nav-text">FTA정보</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/trade/showStat}">
+            <i class="fa fa-solid fa-chart-simple fa-lg"></i>
+            <span class="nav-text">무역통계</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/cca/boardList}">
+            <i class="fa fa-solid fa-handshake fa-lg"></i>
+            <span class="nav-text">관세사상담</span>
+          </a>
+        </li>
+        <li sec:authorize="isAnonymous()">
+          <a th:href="@{/user/login}">
+            <i class="fa fa-regular fa-user fa-lg"></i>
+            <span class="nav-text">로그인</span>
+          </a>
+        </li>
+        <li sec:authorize="isAuthenticated()">
+          <a th:href="@{/user/logout}">
+            <i class="fa fa-user fa-lg"></i>
+            <span class="nav-text">로그아웃</span>
+          </a>
+        </li>
+        <li sec:authorize="hasRole('ROLE_USER')">
+          <a th:href="@{/my/userpage}">
+            <i class="fa fa-solid fa-house-user fa-lg"></i>
+            <span class="nav-text">마이페이지</span>
+          </a>
+        </li>
+        <li sec:authorize="hasRole('ROLE_CCA')">
+          <a th:href="@{/my/ccapage}">
+            <i class="fa fa-solid fa-house-user fa-lg"></i>
+            <span class="nav-text">마이페이지</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h3 class="tit1">원산지결정기준의 종류</h3>
+
+    <div class="scroll_gr">
+      <table class="tbl_st" border="1">
+        <!-- <caption>원산지결정기준의 종류</caption> -->
+        <colgroup>
+          <col span="3" style="width: 10%" />
+          <col span="3" style="width: 23.3%" />
+        </colgroup>
+        <tbody>
+          <tr>
+            <th rowspan="11" scope="col">일반적 기준</th>
+            <th colspan="5" scope="row">완전생산기준</th>
+          </tr>
+          <tr>
+            <th rowspan="10" scope="row">실질적 변형기준</th>
+            <th rowspan="8" scope="row">단독기준</th>
+            <td class="al" rowspan="3">세번변경기준</td>
+            <td class="al" colspan="2">2단위 세번변경(CC)</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">4단위 세번변경(CTH)</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">6단위 세번변경(CTSH)</td>
+          </tr>
+          <tr>
+            <td class="al" rowspan="4">부가가치기준</td>
+            <td class="al" rowspan="3">부가가치율(RVC)</td>
+            <td class="al">직접법(BU)</td>
+          </tr>
+          <tr>
+            <td class="al">공제법(BD)</td>
+          </tr>
+          <tr>
+            <td class="al">순원가법(NC)</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">비원산지재료가치비율(MC)</td>
+          </tr>
+          <tr>
+            <td class="al">특정공정기준</td>
+            <td class="al" colspan="2">재단,봉제,날염,염색 등</td>
+          </tr>
+          <tr>
+            <th scope="row">선택기준</th>
+            <td class="al" colspan="3">
+              <dl>
+                <dt class="fs16">or 조건 예시</dt>
+                <dd>
+                  <ul class="list_st3 li_w50">
+                    <li>세번변경기준 or 부가가치기준</li>
+                    <li>부가가치기준 or 특정공정기준</li>
+                    <li>세번변경기준 or (세번변경기준 and 부가가치기준 )</li>
+                    <li>세번변경기준 or (부가가치기준 and 특정공정기준)</li>
+                    <li>(세번변경기준 and 특정공정기준) or 부가가치기준</li>
+                  </ul>
+                </dd>
+              </dl>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">조합기준</th>
+            <td class="al" colspan="3">
+              <dl>
+                <dt class="fs16">and 조건 예시</dt>
+                <dd>
+                  <ul class="list_st3 li_w50">
+                    <li>세번변경기준 and 부가가치기준</li>
+                    <li>세번변경기준 and 특정공정기준</li>
+                  </ul>
+                </dd>
+              </dl>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="3" rowspan="17" scope="row">보충적기준</th>
+            <td class="al" colspan="3">미소기준(De minimis)</td>
+          </tr>
+          <tr>
+            <td class="al" rowspan="3">누적기준</td>
+            <td class="al" colspan="2">재료누적</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">상품누적</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">공정누적</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="3">중간재</td>
+          </tr>
+          <tr>
+            <td class="al">간접재료</td>
+            <td class="al" colspan="2">공구,금형,설비,연료,촉매제 등</td>
+          </tr>
+          <tr>
+            <td class="al" rowspan="2">재료가격</td>
+            <td class="al" colspan="2">원산지재료의 가격</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">비원산지재료의 가격</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="3">공구,부속품</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="3">용기,포장</td>
+          </tr>
+          <tr>
+            <td class="al" rowspan="4">대체가능물품</td>
+            <td class="al" colspan="2">개별법</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">선입선출법</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">후입선출법</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="2">평균법</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="3">불인정공정(충분가공원칙)</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="3">직접운송원칙</td>
+          </tr>
+          <tr>
+            <td class="al" colspan="3">역외가공</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+
+    <h3 class="tit1 mgt40">FTA협정문상 원산지 결정기준</h3>
+
+    <div class="scroll_gr">
+      <table class="tbl_st" border="1">
+        <!-- <caption>FTA협정문상 원산지 결정기준</caption> -->
+        <colgroup>
+          <col style="width: 20%" />
+          <col span="2" style="width: 40%" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col">Abbreviation</th>
+            <th scope="col">영문설명</th>
+            <th scope="col">국문설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CTC</td>
+            <td>A change in Tariff Classification</td>
+            <td>세번변경기준</td>
+          </tr>
+          <tr>
+            <td>CC</td>
+            <td>A change to this chapter from any other chapter</td>
+            <td>HS 2단위 세번변경</td>
+          </tr>
+          <tr>
+            <td>CTH</td>
+            <td>A change to this heading from ant other heading</td>
+            <td>HS 4단위 세번변경</td>
+          </tr>
+          <tr>
+            <td>CTSH</td>
+            <td>
+              A change to this subheading from any other subheading or from
+              any other heading
+            </td>
+            <td>HS 6단위 세번변경</td>
+          </tr>
+          <tr>
+            <td>WO</td>
+            <td>All the materials used are wholly obtained.</td>
+            <td>완전생산기준</td>
+          </tr>
+          <tr>
+            <td>WOR of Ch. XX</td>
+            <td>All the materials of Chapter XX used are wholly obtained</td>
+            <td>특정류 해당물품의 완전생산기준</td>
+          </tr>
+          <tr>
+            <td>MC(50)</td>
+            <td>
+              The Value of all the non-originating materials used does not
+              exceed 50% of the ex-works price of the product
+            </td>
+            <td>
+              사용된 모든 비원산지 재료의 가격이 공장도 거래가격의 50%를
+              초과하지 아니할 것
+            </td>
+          </tr>
+          <tr>
+            <td>RVC(35/45)</td>
+            <td>
+              No change in tariff classification provided there is a regional
+              value content of not less than : ① 35% under the build-up method
+              or ② 45% under the build-down method
+            </td>
+            <td>
+              세번변경없이 역내 부가가치기준이 ① 집적법(BU)에 의거 35%
+              이상이거나 ② 공제법(BD)에 의거 45% 이상일 것
+            </td>
+          </tr>
+          <tr>
+            <td>NC(50)</td>
+            <td>
+              No change in tariff classification provided there is a regional
+              value content of not less than 50% under the net cost method
+            </td>
+            <td>
+              세번변경없이 순원가법에 의거 역내 부가가치기준이 50% 이상일 것
+            </td>
+          </tr>
+          <tr>
+            <td>MC(50) of XXXX</td>
+            <td>
+              The value of all the non-originating materials of heading XXXX
+              used does not exceed 50% of the ex-works price of the product
+            </td>
+            <td>
+              특정호에 사용된 모든 비원산지 재료의 가격이 공장도 거래가격의
+              50%를 초과하지 아니할 것
+            </td>
+          </tr>
+          <tr>
+            <td>Within CTH</td>
+            <td>
+              A change to this heading from any heading, including same
+              heading of the product
+            </td>
+            <td>다른 호의 제품 또는 해당 호 내의 제품으로부터 변경</td>
+          </tr>
+          <tr>
+            <td>CTH or MC(50)</td>
+            <td>
+              A change to this heading from any heading or all the
+              non-originating materials used should not exceed 50% of the
+              ex-works price of the product
+            </td>
+            <td>
+              HS 4단위 세번이 변경되거나, 비원산지 재료의 가격이 공장도
+              거래가격의 50%를 초과하지 아니할 것
+            </td>
+          </tr>
+          <tr>
+            <td>CTH or RVC(35/45)</td>
+            <td>
+              A change to this heading from any other heading : or No change
+              in tariff clssification provided that there is a regional value
+              content of not less than : ① 35% under the build-up method or ②
+              45% under the build-down method
+            </td>
+            <td>
+              HS 4단위 세번이 변경되거나 세번이 변경되지 않고
+              역내부가가치기준이 ① 집적법(BU)에 의거 35% 이상이거나 ②
+              공제법(BD)에 의거 45% 이상일 것
+            </td>
+          </tr>
+          <tr>
+            <td>CC or MC(50)</td>
+            <td>
+              A change to this chapter from any chapter, provided that all the
+              non-originating materials used does not exceed 50% of the
+              ex-works price of the product
+            </td>
+            <td>
+              HS 2단위 세번변경되거나, 사용된 모든 비원지 재료의 가격이 공장도
+              거래가격의 50%를 초과하지 아니할 것
+            </td>
+          </tr>
+          <tr>
+            <td>CTH + MC(50)</td>
+            <td>
+              A change to this heading from any heading, provided that all the
+              non-originating materials used does not exceed 50% of the
+              ex-works price of the product
+            </td>
+            <td>
+              HS 4단위 세번변경되고, 비원산지재료의 가격이 공장도 거래가격의
+              50%를 초과하지 아니할 것
+            </td>
+          </tr>
+          <tr>
+            <td>CC + MC(50)</td>
+            <td>
+              A change to this chapter from any chapter, provided that all the
+              non-originating materials used does not exceed 50% of the
+              ex-works price of the product
+            </td>
+            <td>
+              HS 2단위 세번변경되고, 비원산지재료의 가격이 공장도 거래가격의
+              50%를 초과하지 아니할 것
+            </td>
+          </tr>
+          <tr>
+            <td>CTH + RVC(30/45)</td>
+            <td>
+              A change to this heading from any other heading : provided that
+              there is a regional value content of not less than : ① 30% under
+              the build-up method or ② 45% under the build-down method
+            </td>
+            <td>
+              HS 4단위 세번변경되고, 역내부가가치기준이 ① 집적법(BU)에 의거
+              30% 이상이거나 ② 공제법(BD)에 의거 45% 이상일 것
+            </td>
+          </tr>
+          <tr>
+            <td>CC ex. from ch XX</td>
+            <td>
+              A change to this chapter from any other chapter, except from
+              chapter XX
+            </td>
+            <td>다른 류에서 해당 류로 세번변경조건, 단 XX류는 제외</td>
+          </tr>
+          <tr>
+            <td>CTH ex. from heading XXXX</td>
+            <td>
+              A change to this heading from any other heading, except from
+              heading XXXX
+            </td>
+            <td>다른 호에서 해당 호로 세번변경조건, 단 XXXX호는 제외</td>
+          </tr>
+          <tr>
+            <td>CTH ex. from(waste & scrap)</td>
+            <td>
+              A change to this heading from non-originating materials of
+              heading XXXX, except that (of waste and scrap) of heading XXXX
+            </td>
+            <td>
+              특정 XXXX호의 비원산지 재료로부터 해당 호로 세번변경조건, 단
+              XXXX호의 waste and scrap 제외
+            </td>
+          </tr>
+          <tr>
+            <td>VNM less than VOM</td>
+            <td>
+              The value of all the non-originating materials used does not
+              exceed the value of all the originating materials used
+            </td>
+            <td>
+              비원산지 재료의 가격이 원산지 재료의 가격을 초과하지 않을 것
+            </td>
+          </tr>
+          <tr>
+            <td>CTH+TV(40)</td>
+            <td>
+              A change from heading XXXX, whether or not there is also a
+              change from any other heading, provided that the value of the
+              non-originating materials of heading XXXX does not exceed 40% of
+              the transaction value of the good
+            </td>
+            <td>
+              HS 4단위 세번변경되고, 비원산지 재료의 가격이 거래가격의 40%를
+              초과하지 않을 것
+            </td>
+          </tr>
+          <tr>
+            <td>SP(cutting & sewing)</td>
+            <td>
+              The good is cut and sewn and assembled in the territory of one
+              or both of the parties
+            </td>
+            <td>재단 봉제 가공이 해당국 또는 양 당사국 영역에서 수행될 것</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- 위로가기 -->
+  <div class="moveTopBtn">
+    <i class="fa-solid fa-chevron-up"></i>
+  </div>
+
+  <!-- footer -->
+  <footer class="footer-wave">
+    <div class="waves">
+      <div class="wave" id="wave1"></div>
+      <div class="wave" id="wave2"></div>
+      <div class="wave" id="wave3"></div>
+      <div class="wave" id="wave4"></div>
+    </div>
+
+    <ul class="footer-wave-menu">
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/}">HOME</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/news}">무역뉴스</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/info/infoList}">FTA정보</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/trade/showStat}">무역통계</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/cca/boardList}">관세사상담</a>
+      </li>
+    </ul>
+    <p>&copy;2024 HScode Zoom | All Rights Reserved</p>
+  </footer>
+  <!-- End footer -->
+  <!--script-->
+  <script th:src="@{/assets/js/core/jquery.min.js}" type="text/javascript"></script>
+  <script th:src="@{/assets/js/core/popper.min.js}" type="text/javascript"></script>
+  <script th:src="@{/assets/js/core/bootstrap.min.js}" type="text/javascript"></script>
+
+  <script th:src="@{/assets/js/plugins/bootstrap-switch.js}"></script>
+
+  <script th:src="@{/assets/js/plugins/nouislider.min.js}" type="text/javascript"></script>
+
+  <script th:src="@{/assets/js/plugins/moment.min.js}"></script>
+  <script th:src="@{/assets/js/plugins/bootstrap-datepicker.js}" type="text/javascript"></script>
+
+  <script th:src="@{/assets/js/paper-kit.min.js?v=2.2.0}" type="text/javascript"></script>
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
+  <script>
+    const $topBtn = document.querySelector(".moveTopBtn");
+
+    // 버튼 클릭 시 맨 위로 이동
+    $topBtn.onclick = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,186 @@
+/* * {
+    box-sizing: border-box;
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+  } */
+
+/* body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  } */
+
+/* 페이지 헤더 높이 줄이기 */
+.page-header {
+  min-height: 20vh;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 670px;
+  height: 1300px;
+  background: #ffffff;
+  border: 1px solid #aacdff;
+  box-shadow: 7px 7px 39px rgba(0, 104, 255, 0.25);
+  border-radius: 20px;
+  margin: 60px auto 100px;
+}
+
+.member-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 470px;
+  height: 1200px;
+  margin-top: 72px;
+  margin-bottom: 70px;
+}
+
+.header {
+  width: 466px;
+  height: 94px;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 47px;
+  color: #0068ff;
+}
+
+.user-info {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #797979;
+
+  width: 466px;
+  height: 750px;
+  margin-top: 21px;
+}
+
+input {
+  width: 466px;
+  height: 40px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #cfcfcf;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding-bottom: 0px;
+}
+
+.radio {
+  height: 15px;
+  width: 30px;
+}
+
+hr {
+  border: 0.5px solid #cfcfcf;
+}
+
+.nec {
+  border-bottom: 1px solid #0068ff;
+}
+
+.ccanum {
+  border-bottom: 1px solid #f3f3f3;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.gender {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 140px;
+  height: 23.94px;
+  margin-top: 50px;
+}
+
+.gender input {
+  width: 20px;
+  height: 19.95px;
+  background: #ebebeb;
+  border: 1px solid #d2d2d2;
+}
+
+.gender label {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.agree-check {
+  width: 470px;
+  height: 50.06px;
+  margin-top: 30.05px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  color: #000000;
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
+}
+
+/* .btn {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+    width: 470px;
+    height: 106px;
+    border-top: 1px solid #e6e6e6; 
+  } */
+
+ul.ccaConfirm {
+  list-style-type: none;
+  padding: 10px;
+  margin: 10px;
+}
+
+ul.ccaConfirm li {
+  margin-bottom: 5px;
+}
+
+ul.ccaConfirm li strong {
+  display: inline-block;
+  width: 80px;
+  text-align: left;
+  /* margin-left: 10px; */
+}
+
+#checkId,
+#checkPwd,
+#checkName,
+#checkPhone,
+#checkEmail,
+#checkRole,
+#checkCcaNum {
+  margin-left: 120px;
+}
+
+#checkLabel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  margin-top: 30px;
+  width: 470px;
+  height: 50px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 27px;
+  color: #0068ff;
+  background: #ffffff;
+  border: 1px solid #aacdff;
+  border-radius: 10px;
+}
+
+.button:hover {
+  box-shadow: 7px 7px 39px rgba(0, 104, 255, 0.25);
+}

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>수출활용정보</title>
+	<!--font-->
+	<link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+
+	<!--css-->
+	<link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+	<link th:href="@{/assets/css/with-sidebar.css}" rel="stylesheet" />
+	<link th:href="@{/assets/demo/demo.css}" rel="stylesheet" />
+	<link th:href="@{/assets/css/info-utilization.css}" rel="stylesheet" />
+
+	<!-- Resources -->
+	<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+	<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+	<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+	<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+	<script th:src="@{/script/jquery-3.7.1.min.js}"></script>
+
+
+
+	<script>
+		$(document).ready(function () {
+			$('.ftaTop').click(function (event) {
+				event.preventDefault();
+
+				$('.ftaTop').removeClass('on');
+				$(this).addClass('on');
+
+				var boxToShow = $(this).attr('href');
+				$('.box').hide();
+				$(boxToShow).show();
+
+				$('html, body').animate({ scrollTop: 0 }, 'fast');
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="300">
+		<div class="container">
+			<div class="navbar-translate">
+				<a class="navbar-brand" th:href="@{/}" rel="tooltip"
+					data-placement="bottom">
+					<img th:src="@{/images/web-logo9.png}" alt="로고">
+				</a>
+			</div>
+			<div class="collapse navbar-collapse justify-content-end" id="navigation">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/news}">
+							무역뉴스
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/info/infoList}">
+							FTA정보
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/trade/showStat}">
+							무역통계
+						</a>
+					</li>
+
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" href="#"
+							role="button" aria-haspopup="true" aria-expanded="false">관세사상담</a>
+						<ul class="dropdown-menu dropdown-info" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" th:href="@{/cca/ccaList}">관세사목록</a>
+							<a class="dropdown-item" th:href="@{/cca/boardList}">상담목록</a>
+							<a class="dropdown-item" th:href="@{/cca/ccaWrite}">상담하기</a>
+						</ul>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- End Navbar -->
+
+	<!-- page-header 시작-->
+	<div class="page-header section-dark" th:style="'background-image: url(\'' + @{/images/fta-header.jpg} + '\')'">
+		<div class="filter"></div>
+		<div class="content-center">
+			<div class="container">
+				<div class="title-brand">
+					<h1 class="presentation-title">수출활용정보</h1>
+					<h3 class="presentation-subtitle"></h3>
+				</div>
+			</div> <!--div.content-center-->
+		</div>
+	</div>
+	<!-- End page-header -->
+
+	<!-- 왼쪽 사이드바 -->
+	<section id="menubar">
+		<div id="menubar-nav">
+			<ul>
+				<li><a th:href="@{/info/infoList}">FTA정보</a></li>
+				<li><a th:href="@{/info/origin}">원산지결정기준</a></li>
+				<li><a th:href="@{/info/country}">FTA협정국</a></li>
+				<li><a th:href="@{/info/tarrifrate}">세율정보</a></li>
+				<li class="active"><a th:href="@{/info/export_utilization}">수출활용정보</a></li>
+				<li><a th:href="@{/info/import_utilization}">수입활용정보</a></li>
+			</ul>
+		</div>
+	</section>
+	<!-- 왼쪽 사이드바 End-->
+
+	<!-- side-bar 시작-->
+	<nav class="main-menu">
+		<div class="settings"></div>
+		<div class="scrollbar" id="style-1">
+			<ul>
+				<li class="menu-img">
+					<a href="#">
+						<i class="fa fa-solid fa-bars fa-lg"></i>
+						<span class="nav-text">Menu</span>
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/news}">
+						<i class="fa fa-solid fa-newspaper fa-lg"></i>
+						<span class="nav-text">무역뉴스</span>
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/info/infoList}">
+						<i class="fa fa-solid fa-book fa-lg"></i>
+						<span class="nav-text">FTA정보</span>
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/trade/showStat}">
+						<i class="fa fa-solid fa-chart-simple fa-lg"></i>
+						<span class="nav-text">무역통계</span>
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/cca/boardList}">
+						<i class="fa fa-solid fa-handshake fa-lg"></i>
+						<span class="nav-text">관세사상담</span>
+					</a>
+				</li>
+				<li sec:authorize="isAnonymous()">
+					<a th:href="@{/user/login}">
+						<i class="fa fa-regular fa-user fa-lg"></i>
+						<span class="nav-text">로그인</span>
+					</a>
+				</li>
+				<li sec:authorize="isAuthenticated()">
+					<a th:href="@{/user/logout}">
+						<i class="fa fa-user fa-lg"></i>
+						<span class="nav-text">로그아웃</span>
+					</a>
+				</li>
+				<li sec:authorize="hasRole('ROLE_USER')">
+					<a th:href="@{/my/userpage}">
+						<i class="fa fa-solid fa-house-user fa-lg"></i>
+						<span class="nav-text">마이페이지</span>
+					</a>
+				</li>
+				<li sec:authorize="hasRole('ROLE_CCA')">
+					<a th:href="@{/my/ccapage}">
+						<i class="fa fa-solid fa-house-user fa-lg"></i>
+						<span class="nav-text">마이페이지</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+
+	<div class="content">
+		<div class="container-block">
+			<div class="container-top">
+
+				<p class="bu_atte mgb10 top-text">FTA 수출통관 제도를 이용하기 위해서는 다음과 같은 <mark>순차적인 절차</mark>가
+					필요합니다.</p>
+
+
+				<a href="#box-1" class="ftaTop on" title="FTA 협정 발효국 여부 확인하기 바로가기">Ⅰ. FTA 협정 발효국 여부 확인하기</a>
+				<a href="#box-2" class="ftaTop" title="품목번호 확인하기 바로가기">Ⅱ. 품목번호 확인하기 </a>
+				<a href="#box-3" class="ftaTop" title="FTA 관세혜택 확인하기 바로가기">Ⅲ. FTA 관세혜택 확인하기</a>
+				<a href="#box-4" class="ftaTop" title="원산지결정기준 확인하기 바로가기">Ⅳ. 원산지결정기준 확인하기</a>
+				<a href="#box-5" class="ftaTop" title="원산지증명서 발급하기 바로가기">Ⅴ. 원산지증명서 발급하기</a>
+				<a href="#box-6" class="ftaTop" title="관련서류 보관하기 바로가기">Ⅵ. 관련서류 보관하기</a>
+			</div>
+		</div>
+		<hr>
+
+		<div class="box" id="box-1">
+			<h3 class="tit1">Ⅰ.FTA 발효국 여부 확인하기</h3>
+			<hr>
+
+			<p class="bu_st1 cmgl10">우리나라와 수출하고자 하는 국가간에 FTA 체결 후 발효되었는지 확인 <a class="bu_linkL mgl10"
+					th:href="@{/info/country}" target="_blank" title="새창열림">바로가기</a></p>
+			<div class="fta-div">
+
+				<img class="fta-img" th:src="@{/images/fta-country.jpg}" alt="발효국">
+			</div>
+		</div>
+
+		<p></p>
+
+
+		<div class="box" id="box-2">
+			<h3 class="tit1">Ⅱ.품목번호 확인하기</h3>
+
+			<hr>
+
+			<ul class="list_st1">
+				<li>품목번호(HS Code)에 따라 FTA 세율과 원산지결정기준이 정해지므로 정확한 품목번호 확인은 필수</li>
+				<li>수입물품의 경우 품목번호 확인을 위해 관세사 등 전문가와 상담 또는 관세평가분류원에 품목분류 사전심사 신청</li>
+				<li>수출물품의 경우 HS가 우리나라와 다르게 분류될 수 있으므로 상대국 수입자로부터 확인 필요
+					<ul>
+						<li class="bu_atte mgt5">품목번호 검색 사이트 (http://www.customs.go.kr) > Quick menu > 품목분류 <a
+								class="bu_linkL mgl10" href="https://unipass.customs.go.kr/clip/index.do?banId=hsinfo"
+								target="_blank" title="새창열림">바로가기</a></li>
+
+						<li class="bu_atte mgt5">품목분류 추천 서비스 이용하기 <a class="bu_linkL mgl10" th:href="@{/}"
+								target="_blank" title="새창열림">바로가기</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+
+		<div class="box" id="box-3">
+			<h3 class="tit1">Ⅲ.FTA 관세혜택 확인하기</h3>
+			<hr>
+			<ul class="list_st1">
+				<li>수출물품의 품목번호를 찾은 후 상대국의 FTA 관세혜택여부 확인 필요
+					<p class="bu_st2 mgt5"><mark>[관세혜택 : (상대국 MFN 세율 - FTA 세율) X 수출금액]</mark></p>
+				</li>
+				<li>FTA 세율 확인은 협정문상 각국 양허안으로 확인
+					<ul class="list_st2">
+						<li>협정상대국에서 우리나라로 수입하는 경우 우리나라의 양허세율표</li>
+						<li>우리나라에서 협정상대국으로 수출하는 경우 상대국의 양허세율표(상대국)</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+
+		<div class="box" id="box-4">
+			<h3 class="tit1">Ⅳ.원산지 결정기준 확인하기</h3>
+			<hr>
+			<ul class="list_st1">
+				<li>FTA 관세혜택을 받기 위해서는 협정상 규정된 HS별 원산지결정기준 충족 필요</li>
+				<li>원산지결정기준 종류
+					<div class="scroll_gr">
+						<table class="tbl_st" border="1">
+							<!-- <caption>원산지결정기준 종류</caption> -->
+							<colgroup>
+								<col span="2" style="width: 20%;" />
+								<col style="width: 60%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th colspan="2" scope="col">구분</th>
+									<th scope="col">종류</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td rowspan="2">일반기준</td>
+									<td>기본원칙</td>
+									<td>완전생산기준, 역내가공원칙, 충분가공원칙</td>
+								</tr>
+								<tr>
+									<td>분야별특례</td>
+									<td>누적기준, 최소기준, 중간재, 대체가능물품, 간접재료, 세트물품, 부속품, 예비부품, 공구, 포장, 용기</td>
+								</tr>
+								<tr>
+									<td colspan="2">품목별기준</td>
+									<td>세번변경기준, 부가가치기준, 가공공정기준, 조합기준, 선택기준</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li>원산지결정기준 충족여부 판단방법
+					<div class="box_st2 mgt5">
+						<dl>
+							<dt><span class="bg_blue">① BOM으로 원재료 내역 확인</span></dt>
+							<dd class="bu_st2 mgt5">BOM*, Part List** 등 원재료 내역을 확인할 수 있는 서류 준비
+								<p class="bu_atte mgt5">* BOM(Bill Of Material) : 최종제품을 만드는데 필요한 원재료, 중간제품, 부품
+									등의 자료
+									구성표</p>
+
+								<p class="bu_atte mgt5">** Part List : 한 개의 제품을 만드는데 당해 단계에서 필요한 부품 목록과 수량을 보여주는
+									자료
+								</p>
+							</dd>
+						</dl>
+
+						<p class="line_dot"></p>
+
+						<dl>
+							<dt><span class="bg_blue">② 원산지 결정에 필요한 구입경로 등을 확인</span></dt>
+							<dd class="bu_st2 mgt5">BOM을 기초로 원산지 결정에 필요한 구입경로*, 각 재료별 가격, 품목번호 등을 추가
+								<p class="bu_atte mgt5">*내/해외구매 여부, 수출자 직접 구매/생산 여부, 납품업체 생산/국내구매/수입 여부 확인</p>
+							</dd>
+							<dd class="bu_st2 mgt5">국내 구매 부품에 대해 역내산 인정을 위해서는 납품업체로부터 &lsquo;원산지확인서&rsquo; 수취필요
+							</dd>
+						</dl>
+
+						<p class="line_dot"></p>
+
+						<dl>
+							<dt><span class="bg_blue">③ 최종생산제품의 원산지 결정</span></dt>
+							<dd class="bu_st2 mgt5">부품의 원산지 및 가격을 바탕으로 최종제품(수출물품)의 원산지결정기준 충족여부 결정</dd>
+						</dl>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="box" id="box-5">
+			<h3 class="tit1">Ⅴ.원산지증명서 발급하기</h3>
+			<hr>
+			<ul class="list_st1">
+				<li>수출상대국에서 FTA 세율 적용을 위해 한국산 제품임을 증빙하는 필수&middot;공식적인 서류</li>
+				<li>각 협정에서 정한 규격 및 지침에 따라 정확하게 발급하여야 상대국 세관에서 FTA 세율 적용 가능</li>
+				<li>각 협정별 원산지증명서 발급방식
+					<div class="scroll_gr">
+						<table class="tbl_st" border="1">
+							<!-- <caption>각 협정별 원산지증명서 발급방식</caption> -->
+							<colgroup>
+								<col style="width: 9%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">구분</th>
+									<th scope="col">칠레</th>
+									<th scope="col">싱가포르</th>
+									<th scope="col">EFTA</th>
+									<th scope="col">아세안</th>
+									<th scope="col">인도</th>
+									<th scope="col">EU</th>
+									<th scope="col">페루</th>
+									<th scope="col">미국</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>발급방식</td>
+									<td>자율발급</td>
+									<td>기관발급</td>
+									<td>자율발급<br />
+										(스위스 치즈는 기관발급)</td>
+									<td>기관발급</td>
+									<td>기관발급</td>
+									<td>자율발급</td>
+									<td>자율발급</td>
+									<td>자율발급</td>
+								</tr>
+								<tr>
+									<td>발급자</td>
+									<td>수출자</td>
+									<td>*싱가포르(세관) *한국(세관, 상의, 자유무역관리원)</td>
+									<td>수출자/생산자</td>
+									<td>아세안(정부기관), 한국<br />
+										(세관,상의)</td>
+									<td>※인도<br />
+										(수출검사위원회,섬유위원회,수산물수출진흥원)<br />
+										※한국<br />
+										(세관,상의)</td>
+									<td>수출자/ 6천 유로이상인 증수출자</td>
+									<td>수출자/생산자</td>
+									<td>수출자, 수입자, 생산자</td>
+								</tr>
+								<tr>
+									<td>증명서식</td>
+									<td>통일증명서식</td>
+									<td>별도서식</td>
+									<td>송품장</td>
+									<td>통일서식(AK)</td>
+									<td>통일서식</td>
+									<td>송품장</td>
+									<td>통일서식</td>
+									<td>자율(권고서식)</td>
+								</tr>
+								<tr>
+									<td>유효기간</td>
+									<td>2년</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>4년</td>
+								</tr>
+								<tr>
+									<td>사용언어</td>
+									<td colspan="5">영어</td>
+									<td>한국 &middot; EU당사국언어</td>
+									<td>영어</td>
+									<td>영어, 한글<br />
+										(요구시 번역본 제출)</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="scroll_gr mgt30">
+						<table class="tbl_st" border="1">
+							<!-- <caption>각 협정별 원산지증명서 발급방식</caption> -->
+							<colgroup>
+								<col style="width: 9%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+								<col style="width: 11%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">구분</th>
+									<th scope="col">튀르키예</th>
+									<th scope="col">호주</th>
+									<th scope="col">캐나다</th>
+									<th scope="col">중국</th>
+									<th scope="col">뉴질랜드</th>
+									<th scope="col">베트남</th>
+									<th scope="col">콜롬비아</th>
+									<th scope="col">중미</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td rowspan="2">발급방식</td>
+									<td rowspan="2">자율발급</td>
+									<td>자율발급</td>
+									<td rowspan="2">자율발급</td>
+									<td rowspan="2">기관발급</td>
+									<td rowspan="2">자율발급</td>
+									<td rowspan="2">기관발급</td>
+									<td rowspan="2">자율발급</td>
+									<td rowspan="2">자율발급</td>
+								</tr>
+								<tr>
+									<td rowspan="1">기관발급(호주로 한정)</td>
+								</tr>
+								<tr>
+									<td>발급자</td>
+									<td>수출자</td>
+									<td>수출자, 생산자 ※호주(상의, 산업협회)</td>
+									<td>수출자/생산자</td>
+									<td>
+										<p>※중국(해관총서 , 국제무역 촉진위원회)</p>
+
+										<p>※한국(세관, 상의)</p>
+									</td>
+									<td>수출자/생산자</td>
+									<td>
+										<p>※베트남(산업무역부)</p>
+
+										<p>※한국(세관, 상의)</p>
+									</td>
+									<td>수출자/생산자</td>
+									<td>수출자/생산자</td>
+								</tr>
+								<tr>
+									<td>증명서식</td>
+									<td>송품장</td>
+									<td>자율(권고서식)</td>
+									<td>통일서식</td>
+									<td>통일서식</td>
+									<td>송품장/권고서식</td>
+									<td>통일서식</td>
+									<td>통일서식</td>
+									<td>통일서식</td>
+								</tr>
+								<tr>
+									<td>유효기간</td>
+									<td>1년</td>
+									<td>2년</td>
+									<td>2년</td>
+									<td>1년</td>
+									<td>2년</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>1년</td>
+								</tr>
+								<tr>
+									<td>사용언어</td>
+									<td colspan="2">영어</td>
+									<td colspan="1">&nbsp;※한국(한글 또는 영어)<br />
+										※캐나다(영어 또는 불어)</td>
+									<td colspan="5">영어</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="scroll_gr mgt30">
+						<table class="tbl_st" border="1">
+							<!-- <caption>각 협정별 원산지증명서 발급방식</caption> -->
+							<colgroup>
+								<col style="width: 10%;" />
+								<col style="width: 15%;" />
+								<col style="width: 17%;" />
+								<col style="width: 17%;" />
+								<col style="width: 19%;" />
+								<col style="width: 17%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">구분</th>
+									<th scope="col">영국</th>
+									<th scope="col">RCEP</th>
+									<th scope="col">캄보디아</th>
+									<th scope="col">이스라엘</th>
+									<th scope="col">인도네시아</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td rowspan="2">발급방식</td>
+									<td rowspan="2">자율발급</td>
+									<td rowspan="2">자율/기관발급</td>
+									<td rowspan="2">자율/기관발급</td>
+									<td rowspan="2">자율/기관발급</td>
+								</tr>
+								<tr>
+									<td rowspan="1">자율(※발효 시점에서는 활용 불가, 향후 단계적 시행 예정)/기관발급</td>
+								</tr>
+								<tr>
+								</tr>
+								<tr>
+									<td>발급자</td>
+									<td>수출자/ 6천 유로이상인 증수출자</td>
+									<td>수출자, 생산자,수출 당사자의 발급기관(제3.17조)</td>
+									<td>기관발급 : 한국(세관, 상의) 캄보디아 : 상무부<br />
+										자율발급 : 인증수출자</td>
+									<td>기관발급 : 한국(세관, 상의), 이스라엘(재무부 이스라엘조세당국 관세국)<br />
+										자율발급 : 인증수출자, 미화 1000불 이하 수출자</td>
+									<td>기관발급 : 한국(세관, 상의), 인도네시아(통상부)</td>
+								</tr>
+								<tr>
+									<td>증명서식</td>
+									<td>송품장</td>
+									<td>부속서 3-나 (최소 정보 요건)을 포함한 서식</td>
+									<td>자율(3-다) 최소정보요건을 포함한 서식/ 기관(통일서식)</td>
+									<td>자율(송품장)/<br />
+										기관(통일서식)</td>
+									<td>기관(통일서식)/<br />
+										자율(미규정)</td>
+								</tr>
+								<tr>
+									<td>유효기간</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>1년</td>
+									<td>12개월</td>
+									<td>1년</td>
+								</tr>
+								<tr>
+									<td>사용언어</td>
+									<td colspan="1">한글,영어</td>
+									<td colspan="1">영어</td>
+									<td colspan="1">영어</td>
+									<td colspan="1">영어</td>
+									<td colspan="1">영어</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="box" id="box-6">
+			<h3 class="tit1">Ⅵ.관련서류 보관하기</h3>
+			<hr>
+
+			<ul class="list_st1">
+				<li>수출자 및 생산자는 FTA 특례법 제15조에 따라 원산지의 확인, 협정관세의 적용 등에 필요한 것으로서 원산지증빙서류 등을 보관하여야 함
+					<p class="bu_st2 mgt5">수출자 및 생산자 : 원산지증명서의 작성일 또는 발급일부터 5년</p>
+
+					<p class="bu_atte mgt5">다만, 체약상대국이 중국인 경우에는 중국과의 협정 제3.20조에 따라 3년</p>
+				</li>
+				<li>수출자가 보관하여야 하는 서류
+					<ol class="box_st2 list_ol1 mgt10">
+						<li>체약상대국의 수입자에게 제공한 원산지증명서(전자문서를 포함한다) 사본 및 원산지증명서 발급
+							신청서류(전자문서를
+							포함한다) 사본</li>
+						<li>수출신고필증</li>
+						<li>해당 물품의 생산에 사용된 원재료의 수입신고필증(수출자의 명의로 수입신고한 경우만 해당한다)</li>
+						<li>수출거래 관련 계약서</li>
+						<li>해당 물품 및 원재료의 생산 또는 구입 관련 증빙서류</li>
+						<li>원가계산서ㆍ원재료내역서 및 공정명세서</li>
+						<li>해당 물품 및 원재료의 출납ㆍ재고관리대장</li>
+						<li>생산자 또는 해당 물품의 생산에 사용된 재료를 공급하거나 생산한 자가 해당 물품의 원산지증명을 위하여
+							작성한 후
+							수출자에게 제공한 서류</li>
+					</ol>
+				</li>
+				<li>생산자가 보관하여야 하는 서류
+					<ol class="box_st2 list_ol1 mgt10">
+						<li>수출자 또는 체약상대국의 수입자에게 해당 물품의 원산지증명을 위하여 작성ㆍ제공한 서류</li>
+						<li>수출자와의 물품공급계약서</li>
+						<li>제2호다목 및 마목부터 사목까지의 서류</li>
+						<li>해당 물품의 생산에 사용된 재료를 공급하거나 생산한 자가 해당 재료의 원산지증명을 위하여 작성한 후
+							생산자에게
+							제공한 서류</li>
+					</ol>
+				</li>
+			</ul>
+		</div>
+	</div>
+	</div>
+	</div>
+	<!-- 위로가기 -->
+	<div class="moveTopBtn">
+		<i class="fa-solid fa-chevron-up"></i>
+	</div>
+
+	<!-- footer -->
+	<footer class="footer-wave">
+		<div class="waves">
+			<div class="wave" id="wave1"></div>
+			<div class="wave" id="wave2"></div>
+			<div class="wave" id="wave3"></div>
+			<div class="wave" id="wave4"></div>
+		</div>
+
+		<ul class="footer-wave-menu">
+			<li class="menu__item"><a class="menu__link" th:href="@{/}">HOME</a></li>
+			<li class="menu__item"><a class="menu__link" th:href="@{/news}">무역뉴스</a></li>
+			<li class="menu__item"><a class="menu__link" th:href="@{/info/infoList}">FTA정보</a></li>
+			<li class="menu__item"><a class="menu__link" th:href="@{/trade/showStat}">무역통계</a></li>
+			<li class="menu__item"><a class="menu__link" th:href="@{/cca/boardList}">관세사상담</a></li>
+
+		</ul>
+		<p>&copy;2024 HScode Zoom | All Rights Reserved</p>
+	</footer>
+	<!-- End footer -->
+	<!--script-->
+	<script th:src="@{/assets/js/core/jquery.min.js}" type="text/javascript"></script>
+	<script th:src="@{/assets/js/core/popper.min.js}" type="text/javascript"></script>
+	<script th:src="@{/assets/js/core/bootstrap.min.js}" type="text/javascript"></script>
+
+	<script th:src="@{/assets/js/plugins/bootstrap-switch.js}"></script>
+
+	<script th:src="@{/assets/js/plugins/nouislider.min.js}" type="text/javascript"></script>
+
+	<script th:src="@{/assets/js/plugins/moment.min.js}"></script>
+	<script th:src="@{/assets/js/plugins/bootstrap-datepicker.js}" type="text/javascript"></script>
+
+	<script th:src="@{/assets/js/paper-kit.min.js?v=2.2.0}" type="text/javascript"></script>
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
+
+	<script>
+		const $topBtn = document.querySelector(".moveTopBtn");
+
+		// 버튼 클릭 시 맨 위로 이동
+		$topBtn.onclick = () => {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+	</script>
+
+</body>
+
+</html>

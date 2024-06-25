@@ -1,0 +1,47 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  padding: 0;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+#chartdiv {
+  width: 100%;
+  height: 80vh;
+}
+
+#chart1 {
+  width: 100%;
+  height: 80vh;
+}
+
+#chart2 {
+  width: 100%;
+  height: 80vh;
+}
+
+#chart3 {
+  width: 50%;
+  height: 80vh;
+}
+
+#chart4 {
+  width: 100%;
+  height: 80vh;
+}
+
+#chart5 {
+  width: 100%;
+  height: 80vh;
+}
+
+#chart6 {
+  width: 100%;
+  height: 80vh;
+}
+
+.am5-layer-30 {
+  width: 200px;
+  height: 200px;
+}
+

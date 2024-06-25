@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <title>회원가입</title>
+  <!--font-->
+  <link href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css" rel="stylesheet" type="text/css" />
+
+  <!--css-->
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/without-sidebar.css" rel="stylesheet" />
+
+  <link href="/assets/demo/demo.css" rel="stylesheet" />
+  <link href="/assets/css/joinExample.css" rel="stylesheet" />
+  <script th:src="@{/script/jquery-3.7.1.min.js}"></script>
+  <script>
+    $(function () {
+      let myccaNum;
+      // 사용자 유형 선택 라디오 버튼 이벤트 설정
+      $("input[type='radio']").on("change", function () {
+        // 먼저 모든 관련 요소를 숨깁니다.
+        $("#apearCcaNum").css("display", "none");
+        $("#ccaChecktext").css("display", "none");
+        $(".content").css("height", "1300px");
+
+        // 'ROLE_CCA'가 선택되었는지 확인합니다.
+        if ($("input[type='radio'][value='ROLE_CCA']").is(":checked")) {
+          // 관세사가 선택되었다면 caaNum의 초기 설정값 태그 숨김
+          $("#ccaNum2").attr("name", "");
+          // 선택되었다면 관련 요소를 표시합니다.
+          $("#apearCcaNum").css("display", "block");
+          $("#ccaChecktext").css("display", "block");
+          $(".content").css("height", "1500px");
+        } else {
+          // 일반유형자가 선택되었다면 caaNum의 초기 설정값 활성화
+          $("#ccaNum2").attr("name", "ccaNum");
+          // 관세사 번호 영역 숨기기
+          $("#apearCcaNum").css("display", "none");
+          $("#ccaNum1").val("");
+          $("#checkCcaNum").html("");
+          $("#ccaChecktext").html("");
+          $(".content").css("height", "1300px");
+        }
+
+        // 모든 라디오 버튼이 선택 해제되었는지 확인합니다. (이 부분은 일반적으로 필요하지 않을 수 있음)
+        if ($("input[type='radio']:checked").length === 0) {
+          $("#checkRole").html("사용자 유형은 필수값입니다<br>");
+          return;
+        }
+      });
+
+      // null값 방지 check
+      $("#userId").on("keyup", function () {
+        if ($(this).val() == "") {
+          $("#checkId").html("아이디는 필수값입니다<br>");
+        }
+
+        if ($(this).val() != "") {
+          let userId = $("#userId").val();
+          $.ajax({
+            url: "/user/confirmId",
+            method: "POST",
+            data: { userId: userId },
+            async: false,
+            success: function (resp) {
+              if (resp) {
+                $("#checkId").html("사용 가능한 아이디입니다.");
+                $("#submitBtn").attr("disabled", false);
+              } else {
+                $("#checkId").html("이미 사용중인 아이디입니다.");
+                $("#submitBtn").attr("disabled", true);
+                return;
+              }
+            },
+          });
+        }
+        if (
+          $(this).val().trim().length < 8 ||
+          $(this).val().trim().length > 15
+        ) {
+          $("#checkId").html("아이디 길이는 8~15자리 사이입니다.");
+          return;
+        }
+      });
+
+      $("#userPwd").on("keyup", function () {
+        if ($(this).val() == "") {
+          $("#checkPwd").html("비밀번호는 필수값입니다<br>");
+        }
+        if (
+          $(this).val().trim().length < 8 ||
+          $(this).val().trim().length > 12
+        ) {
+          $("#checkPwd").html("비밀번호 길이는 8~12자리 사이입니다.");
+          return;
+        } else {
+          $("#checkPwd").html(null);
+        }
+      });
+
+      $("#userName").on("keyup", function () {
+        if ($(this).val() == "") {
+          $("#checkName").html("이름은 필수값입니다.<br>");
+        } else {
+          $("#checkName").html(null);
+        }
+      });
+
+      $("#phone").on("keyup", function () {
+        // 숫자 이외의 문자를 제거하고 전화번호 형식을 유지합니다.
+        var cleanedInput = $(this)
+          .val()
+          .replace(/[^0-9]/g, "");
+        $(this).val(cleanedInput);
+
+        // 입력된 값이 원래 값과 다를 경우에만 메시지 표시
+        if ($(this).val() !== cleanedInput) {
+          $("#checkPhone").html("숫자만 입력해주세요.");
+        } else {
+          $("#checkPhone").html(null);
+        }
+
+        if ($(this).val() == "") {
+          $("#checkPhone").html("전화번호는 필수값입니다.<br>");
+        }
+        if ($(this).val().trim().length != 11) {
+          $("#checkPhone").html("전화번호의 길이는 11자리 입니다.");
+        } else {
+          $("#checkPhone").html(null);
+        }
+      });
+
+      $("#email").on("keyup", function () {
+        var email = $(this).val();
+
+        if (email === "") {
+          $("#checkEmail").html("이메일은 필수값입니다.<br>");
+        } else if (email.indexOf("@") === -1) {
+          $("#checkEmail").html("올바른 이메일 형식으로 입력해주세요.");
+        } else {
+          $("#checkEmail").html(null);
+        }
+      });
+
+      $("#ccaNum").on("keyup", function () {
+        if ($(this).val() == "") {
+          $("#checkCcaNum").html("관세사부호는 필수값입니다.<br>");
+        } else {
+          $("#checkCcaNum").html(null);
+        }
+      });
+
+      // 관세사 번호 조회 버튼 클릭. 정보가 DB와 일치하는지 확인
+      $("#ccaCheckBtn").on("click", function () {
+        let ccaNum = $("#ccaNum1").val();
+        //   console.log(ccaNum);
+        $.ajax({
+          url: "/user/ccaCheck",
+          method: "POST",
+          data: { ccaNum: ccaNum },
+          success: function (resp) {
+            console.log(resp);
+            let customs = resp[0];
+            myccaNum = resp[1];
+            let ccaCompany = resp[2];
+            let ccaPhone = resp[3];
+            let ccaAddr = resp[4];
+            if (myccaNum != null) {
+              let receivedData = `
+                        <ul class="ccaConfirm">
+                            <li><strong>관할세관:</strong> ${customs}</li>
+                            <li><strong>관세사부호:</strong> ${ccaNum}</li>
+                            <li><strong>회사명:</strong> ${ccaCompany}</li>
+                            <li><strong>전화번호:</strong> ${ccaPhone}</li>
+                            <li><strong>주소:</strong> ${ccaAddr}</li>
+                        </ul>
+                        `;
+              $("#ccaChecktext").html(receivedData);
+              $(".content").css("height", "1700px");
+            } else {
+              errorMessage = `
+                                <div style="color: red; text-align: center;">존재하지 않는 관세사부호입니다.</div>
+                            `;
+              $("#ccaChecktext").html(errorMessage);
+            }
+          },
+        });
+      });
+
+      // 가입 버튼 클릭시 누락 항목 검사
+      $("#submitBtn").on("click", function () {
+        if ($("#ccaNum1").val() == "") {
+        }
+
+        if ($("#userId").val() == "") {
+          alert("아이디를 입력해주세요.");
+          $("#userId").focus();
+          event.preventDefault();
+          return;
+        }
+        if (
+          $("#userId").val().trim().length < 8 ||
+          $("#userId").val().trim().length > 12
+        ) {
+          alert("아이디 길이는 8~15자리 사이입니다.");
+          $("#userId").focus();
+          event.preventDefault();
+          return;
+        }
+        if ($("#userPwd").val() == "") {
+          alert("비밀번호를 입력해주세요.");
+          $("#userPwd").focus();
+          event.preventDefault();
+          return;
+        }
+        if (
+          $("#userPwd").val().trim().length < 8 ||
+          $("#userPwd").val().trim().length > 12
+        ) {
+          alert("비밀번호 길이는 8~12자리 사이입니다.");
+          $("#userPwd").focus();
+          event.preventDefault();
+          return;
+        }
+        if ($("#userName").val() == "") {
+          alert("이름을 입력해주세요.");
+          $("#userName").focus();
+          event.preventDefault();
+          return;
+        }
+        if ($("#phone").val() == "") {
+          alert("전화번호를 입력해주세요.");
+          $("#phone").focus();
+          event.preventDefault();
+          return;
+        }
+        if ($("#phone").val().trim().length != 11) {
+          alert("전화번호의 길이는 11자리 입니다.");
+          $("#phone").focus();
+          event.preventDefault();
+          return;
+        }
+        if ($("#email").val() == "") {
+          alert("이메일을 입력해주세요.");
+          $("#email").focus();
+          event.preventDefault();
+          return;
+        }
+        if ($("#email").val().indexOf("@") === -1) {
+          alert("올바른 이메일 형식으로 입력해주세요.");
+          $("#email").focus();
+          event.preventDefault();
+          return;
+        }
+        if (
+          !$("#ROLE_USER").is(":checked") &&
+          !$("#ROLE_CCA").is(":checked")
+        ) {
+          alert("사용자 유형을 선택해주세요.");
+          $("#ROLE_USER").focus();
+          event.preventDefault();
+          return;
+        }
+
+        if (
+          $("#ROLE_CCA").is(":checked") &&
+          (myccaNum == null || myccaNum === "")
+        ) {
+          alert("존재하지 않는 관세사 부호입니다.");
+          event.preventDefault();
+          return;
+        }
+        if (!$("#termsCheckbox").is(":checked")) {
+          alert("이용약관 및 개인정보 수집에 동의해주세요.");
+          $("#termsCheckbox").focus();
+          event.preventDefault();
+          return;
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top navbar-transparent" color-on-scroll="300">
+    <div class="container">
+      <div class="navbar-translate">
+        <a class="navbar-brand" th:href="@{/}" rel="tooltip" data-placement="bottom">
+          <img th:src="@{/images/web-logo9.png}" alt="로고" />
+        </a>
+      </div>
+      <div class="collapse navbar-collapse justify-content-end" id="navigation">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/news}">
+              무역뉴스
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/info/infoList}">
+              FTA정보
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/trade/showStat}">
+              무역통계
+            </a>
+          </li>
+
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" href="#" role="button"
+              aria-haspopup="true" aria-expanded="false">관세사상담</a>
+            <ul class="dropdown-menu dropdown-info" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" th:href="@{/cca/ccaList}">관세사목록</a>
+              <a class="dropdown-item" th:href="@{/cca/boardList}">상담목록</a>
+              <a class="dropdown-item" th:href="@{/cca/ccaWrite}">상담하기</a>
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+
+  <!-- page-header 시작-->
+  <div class="page-header section-dark" th:style="'background-image: url(\'' + @{/images/cover-img1.jpg} + '\')'">
+    <div class="filter"></div>
+  </div>
+  <!-- End page-header -->
+
+  <!-- side-bar 시작-->
+  <nav class="main-menu">
+    <div class="settings"></div>
+    <div class="scrollbar" id="style-1">
+      <ul>
+        <li class="menu-img">
+          <a href="#">
+            <i class="fa fa-solid fa-bars fa-lg"></i>
+            <span class="nav-text">Menu</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/news}">
+            <i class="fa fa-solid fa-newspaper fa-lg"></i>
+            <span class="nav-text">무역뉴스</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/info/infoList}">
+            <i class="fa fa-solid fa-book fa-lg"></i>
+            <span class="nav-text">FTA정보</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/trade/showStat}">
+            <i class="fa fa-solid fa-chart-simple fa-lg"></i>
+            <span class="nav-text">무역통계</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/cca/boardList}">
+            <i class="fa fa-solid fa-handshake fa-lg"></i>
+            <span class="nav-text">관세사상담</span>
+          </a>
+        </li>
+        <li sec:authorize="isAnonymous()">
+          <a th:href="@{/user/login}">
+            <i class="fa fa-regular fa-user fa-lg"></i>
+            <span class="nav-text">로그인</span>
+          </a>
+        </li>
+        <li sec:authorize="isAuthenticated()">
+          <a th:href="@{/user/logout}">
+            <i class="fa fa-user fa-lg"></i>
+            <span class="nav-text">로그아웃</span>
+          </a>
+        </li>
+        <li sec:authorize="hasRole('ROLE_USER')">
+          <a th:href="@{/my/userpage}">
+            <i class="fa fa-solid fa-house-user fa-lg"></i>
+            <span class="nav-text">마이페이지</span>
+          </a>
+        </li>
+        <li sec:authorize="hasRole('ROLE_CCA')">
+          <a th:href="@{/my/ccapage}">
+            <i class="fa fa-solid fa-house-user fa-lg"></i>
+            <span class="nav-text">마이페이지</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="member-container">
+      <div class="header">
+        <div>회원 가입을 위해</div>
+        <div>정보를 입력해주세요</div>
+      </div>
+      <form th:action="@{/user/joinProc}" method="POST">
+        <div class="user-info">
+          <div id="checkLabel">
+            <span id="checkTag">* 아이디</span>
+            <span id="checkId" style="color: darkblue"></span>
+          </div>
+          <input type="text" id="userId" name="userId" class="main nec" />
+          <div id="checkLabel">
+            <span id="checkTag">* 비밀번호</span>
+            <span id="checkPwd" style="color: darkblue"></span>
+          </div>
+          <input type="password" name="userPwd" id="userPwd" class="main nec" />
+
+          <div id="checkLabel">
+            <span id="checkTag">* 이름</span>
+            <span id="checkName" style="color: darkblue"></span>
+          </div>
+          <input type="text" name="userName" id="userName" class="main nec" />
+
+          <div id="checkLabel">
+            <span id="checkTag">* 전화번호</span>
+            <span id="checkPhone" style="color: darkblue"></span>
+          </div>
+          <input type="tel" name="phone" id="phone" class="main nec" />
+
+          <div id="checkLabel">
+            <span id="checkTag">* 이메일</span>
+            <span id="checkEmail" style="color: darkblue"></span>
+          </div>
+          <input type="text" name="email" id="email" class="main nec" />
+
+          <div id="checkLabel">
+            <span id="checkTag"> * 사용자 유형</span>
+            <span id="checkRole" style="color: darkblue"></span><br />
+          </div>
+          <input type="radio" name="userRole" value="ROLE_USER" id="ROLE_USER" class="radio" />
+          일반사용자
+          <input type="radio" name="userRole" value="ROLE_CCA" id="ROLE_CCA" class="radio" />
+          관세사
+          <!-- <input type="radio" name="userRole" value="ROLE_ADMIN" id="ROLE_ADMIN" class="radio"> 관리자 <br> -->
+          <hr class="main nec" />
+
+          <input type="hidden" id="ccaNum2" name="ccaNum" value="0" />
+          <div id="apearCcaNum" style="display: none">
+            <div id="checkLabel">
+              <span id="checkTag">* 관세사부호</span>
+              <span id="checkCcaNum" style="color: darkblue"></span><br />
+            </div>
+            <input type="number" name="ccaNum" id="ccaNum1" class="ccanum" placeholder="5자리 관세사부호 입력" />
+            <hr class="main nec" />
+
+            <input type="button" name="ccaCheckBtn" id="ccaCheckBtn" class="button" value="조회" />
+            <div id="ccaChecktext"></div>
+          </div>
+
+          회사명 <span id="checkName"></span>
+          <input type="text" name="companyName" id="companyName" class="main" />
+
+          지역<br />
+          <select id="companyRegion">
+            <option value="서울">서울</option>
+            <option value="경기">경기</option>
+            <option value="대전">대전</option>
+            <option value="충남">충남</option>
+            <option value="충북">충북</option>
+            <option value="부산">부산</option>
+            <option value="경남">경남</option>
+            <option value="울산">울산</option>
+            <option value="강원">강원</option>
+            <option value="인천">인천</option>
+            <option value="전남">전남</option>
+            <option value="전북">전북</option>
+            <option value="광주">광주</option>
+            <option value="제주">제주</option>
+            <option value="세종">세종</option>
+            <option value="대구">대구</option>
+            <option value="경북">경북</option>
+          </select><br />
+          <hr class="main" />
+
+          관심품목1
+          <select name="firstItem" id="firstItem">
+            <option value="">전체</option>
+            <option value="동물 및 동물성 제품" th:selected="${searchItem == '동물 및 동물성 제품'}">
+              동물 및 동물성 제품
+            </option>
+            <option value="식물성 제품" th:selected="${searchItem == '식물성 제품'}">
+              식물성 제품
+            </option>
+            <option value="지방 및 오일" th:selected="${searchItem == '지방 및 오일'}">
+              지방 및 오일
+            </option>
+            <option value="음료 및 알코올" th:selected="${searchItem == '음료 및 알코올'}">
+              음료 및 알코올
+            </option>
+            <option value="광물 제품" th:selected="${searchItem == '광물 제품'}">
+              광물 제품
+            </option>
+            <option value="화학 제품" th:selected="${searchItem == '화학 제품'}">
+              화학 제품
+            </option>
+            <option value="가죽 및 모피" th:selected="${searchItem == '가죽 및 모피'}">
+              가죽 및 모피
+            </option>
+            <option value="목재 제품" th:selected="${searchItem == '목재 제품'}">
+              목재 제품
+            </option>
+            <option value="펄프 및 종이" th:selected="${searchItem == '펄프 및 종이'}">
+              펄프 및 종이
+            </option>
+            <option value="섬유 및 의류" th:selected="${searchItem == '섬유 및 의류'}">
+              섬유 및 의류
+            </option>
+            <option value="돌 및 세라믹 제품" th:selected="${searchItem == '돌 및 세라믹 제품'}">
+              돌 및 세라믹 제품
+            </option>
+            <option value="귀금속 및 보석" th:selected="${searchItem == '귀금속 및 보석'}">
+              귀금속 및 보석
+            </option>
+            <option value="비금속 광물" th:selected="${searchItem == '비금속 광물'}">
+              비금속 광물
+            </option>
+            <option value="철강 및 비철금속" th:selected="${searchItem == '철강 및 비철금속'}">
+              철강 및 비철금속
+            </option>
+            <option value="기계 및 전기 기기" th:selected="${searchItem == '기계 및 전기 기기'}">
+              기계 및 전기 기기
+            </option>
+            <option value="운송 장비" th:selected="${searchItem == '운송 장비'}">
+              운송 장비
+            </option>
+            <option value="정밀기기" th:selected="${searchItem == '정밀기기'}">
+              정밀기기
+            </option>
+            <option value="무기 및 탄약" th:selected="${searchItem == '무기 및 탄약'}">
+              무기 및 탄약
+            </option>
+            <option value="가구 및 조명" th:selected="${searchItem == '가구 및 조명'}">
+              가구 및 조명
+            </option>
+            <option value="장난감 및 게임" th:selected="${searchItem == '장난감 및 게임'}">
+              장난감 및 게임
+            </option>
+            <option value="기타 제조품" th:selected="${searchItem == '기타 제조품'}">
+              기타 제조품
+            </option>
+            <option value="예술품 및 수집품" th:selected="${searchItem == '예술품 및 수집품'}">
+              예술품 및 수집품
+            </option>
+            <option value="음악기" th:selected="${searchItem == '음악기'}">
+              음악기
+            </option>
+            <option value="식물성 추출물" th:selected="${searchItem == '식물성 추출물'}">
+              식물성 추출물
+            </option>
+            <option value="동물성 조제품" th:selected="${searchItem == '동물성 조제품'}">
+              동물성 조제품
+            </option>
+            <option value="플라스틱 및 고무" th:selected="${searchItem == '플라스틱 및 고무'}">
+              플라스틱 및 고무
+            </option>
+            <option value="페인트 및 화학물질" th:selected="${searchItem == '페인트 및 화학물질'}">
+              페인트 및 화학물질
+            </option>
+            <option value="의료 및 위생 제품" th:selected="${searchItem == '의료 및 위생 제품'}">
+              의료 및 위생 제품
+            </option>
+            <option value="환경 제품 및 에너지" th:selected="${searchItem == '환경 제품 및 에너지'}">
+              환경 제품 및 에너지
+            </option>
+          </select><br />
+
+          관심품목2
+          <select name="secondItem" id="searchItem">
+            <option value="">전체</option>
+            <option value="동물 및 동물성 제품" th:selected="${searchItem == '동물 및 동물성 제품'}">
+              동물 및 동물성 제품
+            </option>
+            <option value="식물성 제품" th:selected="${searchItem == '식물성 제품'}">
+              식물성 제품
+            </option>
+            <option value="지방 및 오일" th:selected="${searchItem == '지방 및 오일'}">
+              지방 및 오일
+            </option>
+            <option value="음료 및 알코올" th:selected="${searchItem == '음료 및 알코올'}">
+              음료 및 알코올
+            </option>
+            <option value="광물 제품" th:selected="${searchItem == '광물 제품'}">
+              광물 제품
+            </option>
+            <option value="화학 제품" th:selected="${searchItem == '화학 제품'}">
+              화학 제품
+            </option>
+            <option value="가죽 및 모피" th:selected="${searchItem == '가죽 및 모피'}">
+              가죽 및 모피
+            </option>
+            <option value="목재 제품" th:selected="${searchItem == '목재 제품'}">
+              목재 제품
+            </option>
+            <option value="펄프 및 종이" th:selected="${searchItem == '펄프 및 종이'}">
+              펄프 및 종이
+            </option>
+            <option value="섬유 및 의류" th:selected="${searchItem == '섬유 및 의류'}">
+              섬유 및 의류
+            </option>
+            <option value="돌 및 세라믹 제품" th:selected="${searchItem == '돌 및 세라믹 제품'}">
+              돌 및 세라믹 제품
+            </option>
+            <option value="귀금속 및 보석" th:selected="${searchItem == '귀금속 및 보석'}">
+              귀금속 및 보석
+            </option>
+            <option value="비금속 광물" th:selected="${searchItem == '비금속 광물'}">
+              비금속 광물
+            </option>
+            <option value="철강 및 비철금속" th:selected="${searchItem == '철강 및 비철금속'}">
+              철강 및 비철금속
+            </option>
+            <option value="기계 및 전기 기기" th:selected="${searchItem == '기계 및 전기 기기'}">
+              기계 및 전기 기기
+            </option>
+            <option value="운송 장비" th:selected="${searchItem == '운송 장비'}">
+              운송 장비
+            </option>
+            <option value="정밀기기" th:selected="${searchItem == '정밀기기'}">
+              정밀기기
+            </option>
+            <option value="무기 및 탄약" th:selected="${searchItem == '무기 및 탄약'}">
+              무기 및 탄약
+            </option>
+            <option value="가구 및 조명" th:selected="${searchItem == '가구 및 조명'}">
+              가구 및 조명
+            </option>
+            <option value="장난감 및 게임" th:selected="${searchItem == '장난감 및 게임'}">
+              장난감 및 게임
+            </option>
+            <option value="기타 제조품" th:selected="${searchItem == '기타 제조품'}">
+              기타 제조품
+            </option>
+            <option value="예술품 및 수집품" th:selected="${searchItem == '예술품 및 수집품'}">
+              예술품 및 수집품
+            </option>
+            <option value="음악기" th:selected="${searchItem == '음악기'}">
+              음악기
+            </option>
+            <option value="식물성 추출물" th:selected="${searchItem == '식물성 추출물'}">
+              식물성 추출물
+            </option>
+            <option value="동물성 조제품" th:selected="${searchItem == '동물성 조제품'}">
+              동물성 조제품
+            </option>
+            <option value="플라스틱 및 고무" th:selected="${searchItem == '플라스틱 및 고무'}">
+              플라스틱 및 고무
+            </option>
+            <option value="페인트 및 화학물질" th:selected="${searchItem == '페인트 및 화학물질'}">
+              페인트 및 화학물질
+            </option>
+            <option value="의료 및 위생 제품" th:selected="${searchItem == '의료 및 위생 제품'}">
+              의료 및 위생 제품
+            </option>
+            <option value="환경 제품 및 에너지" th:selected="${searchItem == '환경 제품 및 에너지'}">
+              환경 제품 및 에너지
+            </option>
+          </select><br />
+
+          관심품목3
+          <select name="thirdItem" id="thirdItem">
+            <option value="">전체</option>
+            <option value="동물 및 동물성 제품" th:selected="${searchItem == '동물 및 동물성 제품'}">
+              동물 및 동물성 제품
+            </option>
+            <option value="식물성 제품" th:selected="${searchItem == '식물성 제품'}">
+              식물성 제품
+            </option>
+            <option value="지방 및 오일" th:selected="${searchItem == '지방 및 오일'}">
+              지방 및 오일
+            </option>
+            <option value="음료 및 알코올" th:selected="${searchItem == '음료 및 알코올'}">
+              음료 및 알코올
+            </option>
+            <option value="광물 제품" th:selected="${searchItem == '광물 제품'}">
+              광물 제품
+            </option>
+            <option value="화학 제품" th:selected="${searchItem == '화학 제품'}">
+              화학 제품
+            </option>
+            <option value="가죽 및 모피" th:selected="${searchItem == '가죽 및 모피'}">
+              가죽 및 모피
+            </option>
+            <option value="목재 제품" th:selected="${searchItem == '목재 제품'}">
+              목재 제품
+            </option>
+            <option value="펄프 및 종이" th:selected="${searchItem == '펄프 및 종이'}">
+              펄프 및 종이
+            </option>
+            <option value="섬유 및 의류" th:selected="${searchItem == '섬유 및 의류'}">
+              섬유 및 의류
+            </option>
+            <option value="돌 및 세라믹 제품" th:selected="${searchItem == '돌 및 세라믹 제품'}">
+              돌 및 세라믹 제품
+            </option>
+            <option value="귀금속 및 보석" th:selected="${searchItem == '귀금속 및 보석'}">
+              귀금속 및 보석
+            </option>
+            <option value="비금속 광물" th:selected="${searchItem == '비금속 광물'}">
+              비금속 광물
+            </option>
+            <option value="철강 및 비철금속" th:selected="${searchItem == '철강 및 비철금속'}">
+              철강 및 비철금속
+            </option>
+            <option value="기계 및 전기 기기" th:selected="${searchItem == '기계 및 전기 기기'}">
+              기계 및 전기 기기
+            </option>
+            <option value="운송 장비" th:selected="${searchItem == '운송 장비'}">
+              운송 장비
+            </option>
+            <option value="정밀기기" th:selected="${searchItem == '정밀기기'}">
+              정밀기기
+            </option>
+            <option value="무기 및 탄약" th:selected="${searchItem == '무기 및 탄약'}">
+              무기 및 탄약
+            </option>
+            <option value="가구 및 조명" th:selected="${searchItem == '가구 및 조명'}">
+              가구 및 조명
+            </option>
+            <option value="장난감 및 게임" th:selected="${searchItem == '장난감 및 게임'}">
+              장난감 및 게임
+            </option>
+            <option value="기타 제조품" th:selected="${searchItem == '기타 제조품'}">
+              기타 제조품
+            </option>
+            <option value="예술품 및 수집품" th:selected="${searchItem == '예술품 및 수집품'}">
+              예술품 및 수집품
+            </option>
+            <option value="음악기" th:selected="${searchItem == '음악기'}">
+              음악기
+            </option>
+            <option value="식물성 추출물" th:selected="${searchItem == '식물성 추출물'}">
+              식물성 추출물
+            </option>
+            <option value="동물성 조제품" th:selected="${searchItem == '동물성 조제품'}">
+              동물성 조제품
+            </option>
+            <option value="플라스틱 및 고무" th:selected="${searchItem == '플라스틱 및 고무'}">
+              플라스틱 및 고무
+            </option>
+            <option value="페인트 및 화학물질" th:selected="${searchItem == '페인트 및 화학물질'}">
+              페인트 및 화학물질
+            </option>
+            <option value="의료 및 위생 제품" th:selected="${searchItem == '의료 및 위생 제품'}">
+              의료 및 위생 제품
+            </option>
+            <option value="환경 제품 및 에너지" th:selected="${searchItem == '환경 제품 및 에너지'}">
+              환경 제품 및 에너지
+            </option>
+          </select><br />
+          <hr />
+
+          자기소개<br />
+          <input type="text" name="selfInfo" id="selfInfo" />
+
+          <div class="agree-check">
+            <input type="checkbox" class="checkbox" id="termsCheckbox" />
+            이용약관 개인정보 수집 및 이용약관에 모두 동의합니다.
+          </div>
+          <!-- <div class="btn"> -->
+          <input type="submit" id="submitBtn" class="button" value="회원가입" />
+          <input type="reset" id="resetBtn" class="button" value="초기화" />
+          <!-- </div> -->
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 위로가기 -->
+  <div class="moveTopBtn">
+    <i class="fa-solid fa-chevron-up"></i>
+  </div>
+
+  <!-- footer -->
+  <footer class="footer-wave">
+    <div class="waves">
+      <div class="wave" id="wave1"></div>
+      <div class="wave" id="wave2"></div>
+      <div class="wave" id="wave3"></div>
+      <div class="wave" id="wave4"></div>
+    </div>
+
+    <ul class="footer-wave-menu">
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/}">HOME</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/news}">무역뉴스</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/info/infoList}">FTA정보</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/trade/showStat}">무역통계</a>
+      </li>
+      <li class="menu__item">
+        <a class="menu__link" th:href="@{/cca/boardList}">관세사상담</a>
+      </li>
+    </ul>
+    <p>&copy;2024 HScode Zoom | All Rights Reserved</p>
+  </footer>
+  <!-- End footer -->
+
+  <!--script-->
+  <script>
+    const $topBtn = document.querySelector(".moveTopBtn");
+
+    // 버튼 클릭 시 맨 위로 이동
+    $topBtn.onclick = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  </script>
+  <script th:src="@{/script/jquery-3.7.1.min.js}" type="text/javascript"></script>
+  <script th:src="@{/assets/js/core/popper.min.js}" type="text/javascript"></script>
+  <script th:src="@{/assets/js/core/bootstrap.min.js}" type="text/javascript"></script>
+
+  <script th:src="@{/assets/js/plugins/bootstrap-switch.js}"></script>
+
+  <script th:src="@{/assets/js/plugins/nouislider.min.js}" type="text/javascript"></script>
+
+  <script th:src="@{/assets/js/plugins/moment.min.js}"></script>
+  <script th:src="@{/assets/js/plugins/bootstrap-datepicker.js}" type="text/javascript"></script>
+
+  <script th:src="@{/assets/js/paper-kit.min.js?v=2.2.0}" type="text/javascript"></script>
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
+</body>
+
+</html>

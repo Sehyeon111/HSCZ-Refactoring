@@ -1,0 +1,143 @@
+@import "without-sidebar.css";
+
+/* 페이지 헤더 높이 줄이기 */
+.page-header {
+  min-height: 20vh;
+}
+
+.contact-wrap {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  width: 700px;
+  height: 730px;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+.content-write {
+  width: 700px;
+  height: 730px;
+  border: none;
+  padding: 50px;
+}
+
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.content-write h3 {
+  display: inline-block;
+  margin-bottom: 40px;
+  color: #000;
+  font-size: 35px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.myInputForm {
+  width: 235px;
+  height: 63px;
+}
+
+.myInputForm .inputFormControl {
+  height: 47px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  color: #000;
+  padding: 6px 12px;
+}
+
+.myRow > div {
+  display: inline-block;
+}
+
+.nameForm {
+  width: 205px;
+  height: 47px;
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
+  border: none;
+  font-size: 15px;
+  color: #000;
+  padding: 6px 12px;
+  text-align: right;
+}
+
+.myInputForm .titleForm {
+  width: 600px;
+}
+
+.myTextForm .textFormControl {
+  width: 600px;
+  height: 250px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  color: #000;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+}
+
+input,
+textarea {
+  outline: none;
+}
+
+.mySelectForm span {
+  font-size: 17px;
+  color: #000;
+  margin-right: 13px;
+}
+
+.recommendCode span {
+  font-size: 17px;
+  color: #000;
+  margin-right: 13px;
+}
+
+.mySelectForm select {
+  width: 90px;
+  height: 35px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  color: #000;
+}
+
+/* 버튼설정 */
+.mySubmitBtn {
+  background: #10538a !important;
+  border-color: #10538a !important;
+  color: #fff;
+  padding: 12px 16px;
+  border-width: 1px;
+  border-radius: 5px;
+  font-size: 17px;
+  font-weight: 400;
+  box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
+  position: relative;
+  margin-bottom: 20px;
+  transition: 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 25px;
+}
+
+.mySubmitBtn:hover {
+  background: #0d4878 !important;
+  border-color: #0d4878 !important;
+  box-shadow: 3px 4px 11px 0px #00000040;
+}
+
+.checkBtn {
+  padding: 5px 15px;
+}
+
+#contactForm {
+  margin: 10px auto;
+}
+
+.recommendCode {
+  display: flex;
+  align-items: center;
+  height: 70px;
+}

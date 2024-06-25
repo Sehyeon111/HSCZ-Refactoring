@@ -1,0 +1,117 @@
+@import "without-sidebar.css";
+
+/* 4/21 대시보드 제작시 배경색과 섹션 색 지정 */
+/* body {
+    background-color: #eff3f5;
+} */
+
+/* .test-box {
+    width: 300px;
+    height: 300px;
+    background-color: white;
+} */
+
+body {
+    height: 1000px;
+}
+
+/* 1,2,3등 이미지 삽입 */
+.winner-imgs {
+    width: 1110px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;                   
+}
+
+.win-img {
+    display: inline-block;
+    
+}
+
+.win-img img {
+    width: 100px;
+    margin: 10px 80px;
+}
+
+/* 테이블 세 개 설정 */
+.top3-section {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; /* 줄바꿈 허용 */
+    justify-content: space-between;
+}
+
+.top3-section > div {
+    display: inline-block; /* 또는 'flex'로 설정 */
+}
+
+table {
+    width: 350px;
+    height: 350px;
+    border: 2px solid #10538a;
+    box-shadow: 0 2px 5px rgba(0,0,0,.25);
+    border-collapse: collapse;  
+    transition: all 0.3s ease;
+}
+
+
+/* 테이블 내의 th 요소에 hover가 적용될 때 변화할 스타일 */
+.top3-section table:hover {
+    width: 370px;
+    height: 370px;
+    cursor: pointer;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.top3-code {
+    /* display: inline-block; */
+    text-align: center;
+    /* width: 300px; */
+    height: 70px;
+    margin-bottom: 0;
+    background-color: #10538a;
+    padding-top: 10px;
+    
+}
+
+.top3-code a h2{
+    color: white;
+    font-weight: 900;
+}
+
+.top3-description {
+    /* width: 300px; */
+    border: 2px solid #10538a;
+    border-radius: 5px;
+}
+
+.top3-code th {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+}
+
+.top3-code th a {
+    height: 50px;
+}
+
+.top3-code th a h2 {
+    margin: 0 0 0 0;
+}
+
+.top3-description td h6 {
+    width: 335px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.top3-description tr td .ko-description {
+    color: black;
+}
+
+.top3-description tr td .eng-description {
+    color: #d81e5b;
+}

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담문의글 등록</title>
+
+    <!--font-->
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+
+    <!--css-->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/ccaWrite.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="300">
+        <div class="container">
+            <div class="navbar-translate">
+                <a class="navbar-brand" th:href="@{/}" rel="tooltip"
+                    data-placement="bottom">
+                    <img th:src="@{/images/web-logo9.png}" alt="로고">
+                </a>
+            </div>
+            <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/news}">
+                            무역뉴스
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/info/infoList}">
+                            FTA정보
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" rel="tooltip" data-placement="bottom" th:href="@{/trade/showStat}">
+                            무역통계
+                        </a>
+                    </li>
+
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" href="#"
+                            role="button" aria-haspopup="true" aria-expanded="false">관세사상담</a>
+                        <ul class="dropdown-menu dropdown-info" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" th:href="@{/cca/ccaList}">관세사목록</a>
+                            <a class="dropdown-item" th:href="@{/cca/boardList}">상담목록</a>
+                            <a class="dropdown-item" th:href="@{/cca/ccaWrite}">상담하기</a>
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <!-- page-header 시작-->
+    <div class="page-header section-dark" th:style="'background-image: url(\'' + @{/images/cca-header.jpg} + '\')'">
+        <div class="filter"></div>
+    </div>
+    <!-- End page-header -->
+
+    <!-- side-bar 시작-->
+    <nav class="main-menu">
+        <div class="settings"></div>
+        <div class="scrollbar" id="style-1">
+            <ul>
+                <li class="menu-img">
+                    <a href="#">
+                        <i class="fa fa-solid fa-bars fa-lg"></i>
+                        <span class="nav-text">Menu</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/news}">
+                        <i class="fa fa-solid fa-newspaper fa-lg"></i>
+                        <span class="nav-text">무역뉴스</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/info/infoList}">
+                        <i class="fa fa-solid fa-book fa-lg"></i>
+                        <span class="nav-text">FTA정보</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/trade/showStat}">
+                        <i class="fa fa-solid fa-chart-simple fa-lg"></i>
+                        <span class="nav-text">무역통계</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/cca/boardList}">
+                        <i class="fa fa-solid fa-handshake fa-lg"></i>
+                        <span class="nav-text">관세사상담</span>
+                    </a>
+                </li>
+                <li sec:authorize="isAnonymous()">
+                    <a th:href="@{/user/login}">
+                        <i class="fa fa-regular fa-user fa-lg"></i>
+                        <span class="nav-text">로그인</span>
+                    </a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/user/logout}">
+                        <i class="fa fa-user fa-lg"></i>
+                        <span class="nav-text">로그아웃</span>
+                    </a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_USER')">
+                    <a th:href="@{/my/userpage}">
+                        <i class="fa fa-solid fa-house-user fa-lg"></i>
+                        <span class="nav-text">마이페이지</span>
+                    </a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_CCA')">
+                    <a th:href="@{/my/ccapage}">
+                        <i class="fa fa-solid fa-house-user fa-lg"></i>
+                        <span class="nav-text">마이페이지</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+
+    <div class="content">
+        <div class="contact-wrap">
+            <div class="content-write">
+                <form method="POST" th:action="@{/cca/ccaWrite}" id="contactForm" name="contactForm">
+                    <h3>상담글 작성하기</h3>
+                    <div class="formHeader">
+                        <!-- <div class="recommendCode">
+                            <span>추천세번</span>
+                            <span>[[ ${hsCode} ]]</span>
+                            <input type="hidden" name="productHscode" th:value="${hsCode}" />
+                        </div> -->
+                        <div class="recommendCode">
+                            <span>추천세번</span>
+                            <!-- hsCode가 null이 아닐 때 hsCode 값을 표시 -->
+                            <span th:if="${hsCode != null}" th:text="${hsCode}"></span>
+                            <!-- hsCode가 null일 때 링크 표시 -->
+                            <a th:if="${hsCode == ''}" th:href="@{/}"><input type="button" value="추천세번 확인하기" class="mySubmitBtn checkBtn"></a>
+                            <!-- Hidden input은 hsCode가 null이 아닐 때만 표시 -->
+                            <input type="hidden" name="productHscode" th:value="${hsCode}" th:if="${hsCode != null}" />
+                        </div>
+                        <input type="text" class="inputFormControl nameForm" id="consultWriter" name="consultWriter"
+                            th:value="${#authentication.name}" readonly placeholder="작성자명">
+                    </div>
+
+                    <div class="myInputForm">
+                        <input type="text" class="inputFormControl titleForm" id="consultTitle" name="consultTitle"
+                            required placeholder="상담글 제목">
+                    </div>
+                    <div class="myTextForm">
+                        <textarea class="textFormControl" name="consultContent" id="consultContent" cols="35" rows="10"
+                            placeholder="상담글 내용을 작성하세요" required></textarea>
+                    </div>
+                    <div class="mySelectForm">
+                        <span>품목을 선택하세요</span>
+                        <select id="productCategory" name="productCategory" required>
+                            <option value="">품목선택</option>
+                        <option value="동물 및 동물성 제품" th:selected="${searchItem == '동물 및 동물성 제품'}">
+                            동물 및 동물성 제품
+                        </option>
+                        <option value="식물성 제품" th:selected="${searchItem == '식물성 제품'}">
+                            식물성 제품
+                        </option>
+                        <option value="지방 및 오일" th:selected="${searchItem == '지방 및 오일'}">
+                            지방 및 오일
+                        </option>
+                        <option value="음료 및 알코올" th:selected="${searchItem == '음료 및 알코올'}">
+                            음료 및 알코올
+                        </option>
+                        <option value="광물 제품" th:selected="${searchItem == '광물 제품'}">
+                            광물 제품
+                        </option>
+                        <option value="화학 제품" th:selected="${searchItem == '화학 제품'}">
+                            화학 제품
+                        </option>
+                        <option value="가죽 및 모피" th:selected="${searchItem == '가죽 및 모피'}">
+                            가죽 및 모피
+                        </option>
+                        <option value="목재 제품" th:selected="${searchItem == '목재 제품'}">
+                            목재 제품
+                        </option>
+                        <option value="펄프 및 종이" th:selected="${searchItem == '펄프 및 종이'}">
+                            펄프 및 종이
+                        </option>
+                        <option value="섬유 및 의류" th:selected="${searchItem == '섬유 및 의류'}">
+                            섬유 및 의류
+                        </option>
+                        <option value="돌 및 세라믹 제품" th:selected="${searchItem == '돌 및 세라믹 제품'}">
+                            돌 및 세라믹 제품
+                        </option>
+                        <option value="귀금속 및 보석" th:selected="${searchItem == '귀금속 및 보석'}">
+                            귀금속 및 보석
+                        </option>
+                        <option value="비금속 광물" th:selected="${searchItem == '비금속 광물'}">
+                            비금속 광물
+                        </option>
+                        <option value="철강 및 비철금속" th:selected="${searchItem == '철강 및 비철금속'}">
+                            철강 및 비철금속
+                        </option>
+                        <option value="기계 및 전기 기기" th:selected="${searchItem == '기계 및 전기 기기'}">
+                            기계 및 전기 기기
+                        </option>
+                        <option value="운송 장비" th:selected="${searchItem == '운송 장비'}">
+                            운송 장비
+                        </option>
+                        <option value="정밀기기" th:selected="${searchItem == '정밀기기'}">
+                            정밀기기
+                        </option>
+                        <option value="무기 및 탄약" th:selected="${searchItem == '무기 및 탄약'}">
+                            무기 및 탄약
+                        </option>
+                        <option value="가구 및 조명" th:selected="${searchItem == '가구 및 조명'}">
+                            가구 및 조명
+                        </option>
+                        <option value="장난감 및 게임" th:selected="${searchItem == '장난감 및 게임'}">
+                            장난감 및 게임
+                        </option>
+                        <option value="기타 제조품" th:selected="${searchItem == '기타 제조품'}">
+                            기타 제조품
+                        </option>
+                        <option value="예술품 및 수집품" th:selected="${searchItem == '예술품 및 수집품'}">
+                            예술품 및 수집품
+                        </option>
+                        <option value="음악기" th:selected="${searchItem == '음악기'}">
+                            음악기
+                        </option>
+                        <option value="식물성 추출물" th:selected="${searchItem == '식물성 추출물'}">
+                            식물성 추출물
+                        </option>
+                        <option value="동물성 조제품" th:selected="${searchItem == '동물성 조제품'}">
+                            동물성 조제품
+                        </option>
+                        <option value="플라스틱 및 고무" th:selected="${searchItem == '플라스틱 및 고무'}">
+                            플라스틱 및 고무
+                        </option>
+                        <option value="페인트 및 화학물질" th:selected="${searchItem == '페인트 및 화학물질'}">
+                            페인트 및 화학물질
+                        </option>
+                        <option value="의료 및 위생 제품" th:selected="${searchItem == '의료 및 위생 제품'}">
+                            의료 및 위생 제품
+                        </option>
+                        <option value="환경 제품 및 에너지" th:selected="${searchItem == '환경 제품 및 에너지'}">
+                            환경 제품 및 에너지
+                        </option>
+                    </select>
+                    </div>
+
+                    <div class="myBtnForm">
+                        <input type="submit" value="상담글 등록" class="mySubmitBtn" id="insertConsult">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- footer -->
+    <footer class="footer-wave">
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+        </div>
+
+        <ul class="footer-wave-menu">
+            <li class="menu__item"><a class="menu__link" th:href="@{/}">HOME</a></li>
+            <li class="menu__item"><a class="menu__link" th:href="@{/news}">무역뉴스</a></li>
+            <li class="menu__item"><a class="menu__link" th:href="@{/info/infoList}">FTA정보</a></li>
+            <li class="menu__item"><a class="menu__link" th:href="@{/trade/showStat}">무역통계</a></li>
+            <li class="menu__item"><a class="menu__link" th:href="@{/cca/boardList}">관세사상담</a></li>
+
+        </ul>
+        <p>&copy;2024 HScode Zoom | All Rights Reserved</p>
+    </footer>
+    <!-- End footer -->
+
+    <!--script-->
+    <script>
+        let title = document.getElementById('consultTitle');
+        let content = document.getElementById('consultContent');
+        let category = document.getElementById('productCategory');
+
+        document.getElementById('insertConsult').addEventListener('click', function () {
+            if (title.value.trim().length == 0) {
+                alert('제목을 입력하세요');
+                title.select();
+                return;
+            }
+
+            if (content.value.trim().length == 0) {
+                alert('내용을 입력하세요');
+                content.select();
+                return;
+            }
+
+            if (category == '') {
+                alert('품목을 선택하세요');
+                category.select();
+                return;
+            }
+        })
+    </script>
+
+    <script>
+        const $topBtn = document.querySelector(".moveTopBtn");
+
+        // 버튼 클릭 시 맨 위로 이동
+        $topBtn.onclick = () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
+
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+    <script th:src="@{/script/imexChart.js}"></script>
+
+    <script th:src="@{/assets/js/core/jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/assets/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/assets/js/core/bootstrap.min.js}" type="text/javascript"></script>
+
+    <script th:src="@{/assets/js/plugins/bootstrap-switch.js}"></script>
+
+    <script th:src="@{/assets/js/plugins/nouislider.min.js}" type="text/javascript"></script>
+
+    <script th:src="@{/assets/js/plugins/moment.min.js}"></script>
+    <script th:src="@{/assets/js/plugins/bootstrap-datepicker.js}" type="text/javascript"></script>
+
+    <script th:src="@{/assets/js/paper-kit.min.js?v=2.2.0}" type="text/javascript"></script>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
+</body>
+
+</html>

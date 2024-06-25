@@ -1,0 +1,374 @@
+/* 한국 수출입 현황 제목 */
+#koreatitle {
+  font-size: 30px;
+  line-height: 50px;
+  font-weight: bold;
+}
+
+#maptitle {
+  font-size: 30px;
+  line-height: 50px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+/* 그래프 1번 제목 */
+#title1 {
+  font-weight: 500;
+  text-align: left;
+  font-size: 18px;
+  line-height: 50px;
+  margin-left: 25px;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+#information1 {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  margin-right: 320px;
+}
+
+#smalltitle1 {
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 15px;
+  padding-bottom: 12px;
+}
+
+#line1 {
+  position: absolute;
+  width: 530px;
+  border-top: 1.5px solid black;
+  margin-left: 23px;
+}
+
+.tooltip {
+  visibility: hidden;
+  font-size: 15px;
+  background-color: #54b5f5;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  /* 부모 위치를 기준으로 절대 위치 */
+  z-index: 1;
+  /* 다른 요소들 위에 표시 */
+  opacity: 0;
+  /* 투명도 0 (완전 투명) */
+  transition: visibility 0s, opacity 0.5s linear;
+  top: 57%;
+  left: 17%;
+}
+
+.show-tooltip {
+  visibility: visible;
+  opacity: 1;
+  /* 투명도 1 (완전 불투명) */
+}
+
+/* chart 2번 제목 */
+#title2 {
+  font-weight: 500;
+  text-align: left;
+  font-size: 18px;
+  line-height: 50px;
+  margin-left: 25px;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+#information2 {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  margin-right: 280px;
+}
+
+#smalltitle2 {
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 15px;
+  padding-bottom: 12px;
+}
+
+#line2 {
+  position: absolute;
+  width: 530px;
+  border-top: 1.5px solid black;
+  margin-left: 23px;
+}
+
+.tooltip2 {
+  visibility: hidden;
+  font-size: 15px;
+  background-color: #54b5f5;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  /* 다른 요소들 위에 표시 */
+  opacity: 0;
+  /* 투명도 0 (완전 투명) */
+  transition: visibility 0s, opacity 0.5s linear;
+  top: 57%;
+  right: 23%;
+}
+
+.show-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* chart3 제목 */
+#title3 {
+  font-weight: 500;
+  text-align: left;
+  font-size: 18px;
+  line-height: 50px;
+  margin-left: 25px;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+#information3 {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  margin-right: 220px;
+}
+
+#smalltitle3 {
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 15px;
+  padding-bottom: 12px;
+}
+
+#line3 {
+  position: absolute;
+  width: 530px;
+  border-top: 1.5px solid black;
+  margin-left: 23px;
+}
+
+.tooltip3 {
+  visibility: hidden;
+  font-size: 15px;
+  background-color: #54b5f5;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+  top: 1705px;
+  left: 15%;
+}
+
+.show-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* chart6(파이) 제목 */
+#title6 {
+  font-weight: 500;
+  text-align: left;
+  font-size: 18px;
+  line-height: 50px;
+  margin-left: 25px;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+#information6 {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  margin-right: 220px;
+}
+
+#smalltitle6 {
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 15px;
+  padding-bottom: 12px;
+}
+
+#line6 {
+  position: absolute;
+  width: 530px;
+  border-top: 1.5px solid black;
+  margin-left: 23px;
+}
+
+.tooltip6 {
+  visibility: hidden;
+  font-size: 15px;
+  background-color: #54b5f5;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+  top: 1705px;
+  right: 25%;
+}
+
+.show-tooltip {
+  visibility: visible;
+  /* 툴팁을 보이게 함 */
+  opacity: 1;
+  /* 투명도 1 (완전 불투명) */
+}
+
+/* chart4(bar) 제목 */
+#title4 {
+  font-weight: 500;
+  text-align: left;
+  font-size: 18px;
+  line-height: 50px;
+  margin-left: 25px;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+#information4 {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  margin-right: 220px;
+}
+
+#smalltitle4 {
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 15px;
+  padding-bottom: 12px;
+}
+
+#line4 {
+  position: absolute;
+  width: 530px;
+  border-top: 1.5px solid black;
+  margin-left: 23px;
+}
+
+.tooltip4 {
+  visibility: hidden;
+  font-size: 15px;
+  background-color: #54b5f5;
+  /* 툴팁 배경색 */
+  color: white;
+  /* 툴팁 글자색 */
+  text-align: center;
+  /* 텍스트 중앙 정렬 */
+  border-radius: 6px;
+  /* 테두리 둥글게 */
+  padding: 5px 10px;
+  /* 내부 여백 */
+  position: absolute;
+  z-index: 1;
+  /* 다른 요소들 위에 표시 */
+  opacity: 0;
+  /* 투명도 0 (완전 투명) */
+  transition: visibility 0s, opacity 0.5s linear;
+  top: 2163px;
+  left: 18%;
+}
+
+.show-tooltip {
+  visibility: visible;
+  /* 툴팁을 보이게 함 */
+  opacity: 1;
+  /* 투명도 1 (완전 불투명) */
+}
+
+/* chart5(string) 제목 */
+#title5 {
+  font-weight: 500;
+  text-align: left;
+  font-size: 18px;
+  line-height: 50px;
+  margin-left: 25px;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+#information5 {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  margin-right: 240px;
+}
+
+#smalltitle5 {
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  margin-right: 15px;
+  padding-bottom: 12px;
+}
+
+#line5 {
+  position: absolute;
+  width: 530px;
+  border-top: 1.5px solid black;
+  margin-left: 23px;
+}
+
+.tooltip5 {
+  visibility: hidden;
+  font-size: 15px;
+  background-color: #54b5f5;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+  top: 2163px;
+  left: 59%;
+}
+
+.show-tooltip {
+  visibility: visible;
+  /* 툴팁을 보이게 함 */
+  opacity: 1;
+  /* 투명도 1 (완전 불투명) */
+}
