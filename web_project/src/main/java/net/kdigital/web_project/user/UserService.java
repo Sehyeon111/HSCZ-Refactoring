@@ -47,12 +47,6 @@ public class UserService {
 			return true;
 		}
 		return false;
-		// boolean isExistCustomer = userRepository.existsById(user.getUserId());
-		// if (isExistCustomer)
-		// return false;
-		// 비번 암호화 후 저장
-		// userRepository.save(user.passWordEncoding());
-		// return true;
 
 	}
 
@@ -61,29 +55,19 @@ public class UserService {
 				.orElseThrow(() -> new ResouceNotFoundException("Users", userId));
 	}
 
-	// public UserEntity findCustomerByUserId(String replyWriter) {
-	// Optional<UserEntity> entity = userRepository.findById(replyWriter);
-
-	// if (entity.isPresent()) {
-	// UserEntity customerEntity = entity.get();
-	// return customerEntity;
-	// }
-
-	// return null;
-	// }
-
-	// CCA는 CCA끼리 나중에..
-	// @Transactional
-	// public User increaseTotalLike(String userId) {
-	// User user = findById(userId);
-	// if (user != null) {
-	// user = user.increaseTotalLike(); // likeTotal 증가
-	// userRepository.save(user); // 데이터베이스에 변경 사항 저장
-	// return user;
-	// }
-	// userRepository.save(user);
-	// return null;
-	// }
+	/**
+	 * 좋아요 수 증가
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@Transactional
+	public User increaseTotalLike(String userId) {
+		User user = findById(userId);
+		user = user.increaseTotalLike(); // likeTotal 증가
+		userRepository.save(user); // 데이터베이스에 변경 사항 저장
+		return user;
+	}
 
 	/**
 	 * 모든 관세사 페이지 객체 가져오기
@@ -95,13 +79,6 @@ public class UserService {
 	// Page<User> users = userRepository.findAllUserCCA(pageable);
 	// return users;
 
-	// }
-
-	// public boolean findByUserId(String userId) {
-
-	// boolean customerEntity = userRepository.existsById(userId);
-
-	// return customerEntity;
 	// }
 
 	/**
@@ -137,21 +114,10 @@ public class UserService {
 	// customerLikeRepository.save(entity);
 	// }
 
-	// @Transactional
-	// public void increaseLikeTotal(String replyWriter) {
-	// UserEntity customerEntity = userRepository.findById(replyWriter).get();
+	public List<User> selectTop3CCA() {
+		List<User> ccaList = userRepository.findTop3ByLikeTotal();
 
-	// customerEntity.setLikeTotal(customerEntity.getLikeTotal() + 1);
-	// }
-
-	// CCA는 CCA끼리 나중에..
-	// public List<User> selectTop3CCA() {
-	// List<UserEntity> entityList = userRepository.findTop3ByLikeTotal();
-
-	// List<User> dtoList = new ArrayList<>();
-	// entityList.forEach((entitiy) -> dtoList.add(User.toDTO(entitiy)));
-
-	// return dtoList;
-	// }
+		return ccaList;
+	}
 
 }

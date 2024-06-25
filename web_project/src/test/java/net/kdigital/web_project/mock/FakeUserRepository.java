@@ -1,11 +1,14 @@
 package net.kdigital.web_project.mock;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
+import org.hibernate.mapping.Collection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -48,10 +51,13 @@ public class FakeUserRepository implements UserRepository {
         return null;
     }
 
-    // @Override
-    // public List<UserEntity> findTop3ByLikeTotal() {
-    // int count = 0;
+    @Override
+    public List<User> findTop3ByLikeTotal() {
+        List<User> ccaList = list.stream().filter(user -> user.getUserRole().equals("ROLE_CCA"))
+                .collect(Collectors.toList());
+        Collections.sort(ccaList, (o1, o2) -> o2.getLikeTotal() - o1.getLikeTotal());
 
-    // }
+        return ccaList.subList(0, Math.min(3, ccaList.size()));
+    }
 
 }

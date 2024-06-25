@@ -2,6 +2,8 @@ package net.kdigital.web_project.user.infrastructure;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,9 +53,11 @@ public class UserRepositoryImpl implements UserRepository {
     // 'findByUserId'");
     // }
 
-    // @Override
-    // public List<UserEntity> findTop3ByLikeTotal() {
-    // return userJpaRepository.findTop3ByLikeTotal();
-    // }
+    @Override
+    public List<User> findTop3ByLikeTotal() {
+        return userJpaRepository.findTop3ByLikeTotal().stream()
+                .map(entity -> entity.toModel()).collect(Collectors.toList());
+
+    }
 
 }

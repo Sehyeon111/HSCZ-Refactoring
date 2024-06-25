@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.kdigital.web_project.dto.CustomerItemDTO;
-import net.kdigital.web_project.service.CustomerItemService;
 import net.kdigital.web_project.user.UserService;
 import net.kdigital.web_project.user.domain.User;
+import net.kdigital.web_project.userItem.domain.UserItem;
+import net.kdigital.web_project.userItem.service.UserItemService;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,18 +21,18 @@ import net.kdigital.web_project.user.domain.User;
 public class MainController {
 
 	private final UserService customerService;
-	private final CustomerItemService customerItemService;
+	private final UserItemService customerItemService;
 
 	@GetMapping({ "/", "" })
 	public String index(
 			Model model) {
 
 		List<User> ccaList = customerService.selectTop3CCA();
-		Map<User, CustomerItemDTO> ccaInfoMap = new HashMap<>();
+		Map<User, UserItem> ccaInfoMap = new HashMap<>();
 
 		for (int i = 0; i < ccaList.size(); i++) {
 			String userId = ccaList.get(i).getUserId();
-			CustomerItemDTO itemList = customerItemService.findItem(userId);
+			UserItem itemList = customerItemService.findItem(userId);
 
 			ccaInfoMap.put(ccaList.get(i), itemList);
 		}

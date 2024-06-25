@@ -25,12 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.kdigital.web_project.dto.AnswerDTO;
 import net.kdigital.web_project.dto.BoardDTO;
 import net.kdigital.web_project.dto.CCAListDTO;
-import net.kdigital.web_project.dto.CustomerItemDTO;
 import net.kdigital.web_project.service.CCAListService;
 import net.kdigital.web_project.service.CCAService;
-import net.kdigital.web_project.service.CustomerItemService;
 import net.kdigital.web_project.service.ReplyService;
 import net.kdigital.web_project.user.UserService;
+import net.kdigital.web_project.userItem.domain.UserItem;
+import net.kdigital.web_project.userItem.service.UserItemService;
 import net.kdigital.web_project.util.PageNavigator;
 
 @Slf4j
@@ -42,11 +42,11 @@ public class CCAController {
     private final int pageLimit; // 한 페이지에 보여줄 글의 개수
     private final CCAListService ccaListService;
     private final UserService customerService;
-    private final CustomerItemService customerItemService;
+    private final UserItemService customerItemService;
 
     public CCAController(CCAService ccaService, ReplyService replyService,
             @Value("${user.board.pageLimit}") int pageLimit, CCAListService ccaListService,
-            UserService customerService, CustomerItemService customerItemService) {
+            UserService customerService, UserItemService customerItemService) {
         this.ccaService = ccaService;
         this.replyService = replyService;
         this.pageLimit = pageLimit;
@@ -141,9 +141,9 @@ public class CCAController {
         BoardDTO boardDTO = ccaService.selectOneConsult(consultNum);
         List<AnswerDTO> replyList = replyService.selectAllReplys(consultNum); // 예시일 뿐, 해당 메서드가 실제로 존재한다고 가정
 
-        Map<AnswerDTO, CustomerItemDTO> dataMap = new HashMap<>();
+        Map<AnswerDTO, UserItem> dataMap = new HashMap<>();
         for (AnswerDTO temp : replyList) {
-            CustomerItemDTO customerItemDTO = customerItemService.findItem(temp.getReplyWriter());
+            UserItem customerItemDTO = customerItemService.findItem(temp.getReplyWriter());
             dataMap.put(temp, customerItemDTO);
         }
 

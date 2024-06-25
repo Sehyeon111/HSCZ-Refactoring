@@ -21,6 +21,6 @@ public interface UserRepository {
 
     // Optional<CustomerEntity> findByUserId(String username);
 
-    // List<UserEntity> findTop3ByLikeTotal();
+    List<User> findTop3ByLikeTotal();
 
 }

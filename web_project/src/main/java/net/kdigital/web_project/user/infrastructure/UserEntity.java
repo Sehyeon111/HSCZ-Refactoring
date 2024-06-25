@@ -17,8 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.kdigital.web_project.entity.CustomerItemEntity;
 import net.kdigital.web_project.user.domain.User;
+import net.kdigital.web_project.userItem.infrastructure.UserItemEntity;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -70,7 +70,7 @@ public class UserEntity {
 	 */
 	@OneToMany(mappedBy = "customerEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("item_id asc")
-	private List<CustomerItemEntity> customerItemEntity = new ArrayList<>();
+	private List<UserItemEntity> customerItemEntity = new ArrayList<>();
 
 	public static UserEntity from(User user) {
 		return UserEntity.builder()

@@ -1,4 +1,4 @@
-package net.kdigital.web_project.entity;
+package net.kdigital.web_project.userItem.infrastructure;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,8 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.kdigital.web_project.dto.CustomerItemDTO;
 import net.kdigital.web_project.user.infrastructure.UserEntity;
+import net.kdigital.web_project.userItem.domain.UserItem;
 
 @Entity
 @AllArgsConstructor
@@ -26,7 +26,7 @@ import net.kdigital.web_project.user.infrastructure.UserEntity;
 @ToString
 @Builder
 @Table(name = "customer_item")
-public class CustomerItemEntity {
+public class UserItemEntity {
 
 	@SequenceGenerator(name = "customer_item_seq", sequenceName = "customer_item_seq", initialValue = 1, allocationSize = 1)
 
@@ -48,8 +48,8 @@ public class CustomerItemEntity {
 	@Column(name = "third_item")
 	private String thirdItem;
 
-	public static CustomerItemEntity toEntity(CustomerItemDTO customerItemDTO, UserEntity customerEntity) {
-		return CustomerItemEntity.builder()
+	public static UserItemEntity from(UserItem customerItemDTO, UserEntity customerEntity) {
+		return UserItemEntity.builder()
 				.itemId(customerItemDTO.getItemId())
 				.customerEntity(customerEntity)
 				.firstItem(customerItemDTO.getFirstItem())
@@ -57,4 +57,15 @@ public class CustomerItemEntity {
 				.thirdItem(customerItemDTO.getThirdItem())
 				.build();
 	}
+
+	public UserItem toModel() {
+		return UserItem.builder()
+				.itemId(this.getItemId())
+				.userId(this.getCustomerEntity().getUserId())
+				.firstItem(this.getFirstItem())
+				.secondItem(this.getSecondItem())
+				.thirdItem(this.getThirdItem())
+				.build();
+	}
+
 }

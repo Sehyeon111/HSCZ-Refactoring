@@ -14,17 +14,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.kdigital.web_project.api.OpenApiManager;
-import net.kdigital.web_project.dto.CustomerItemDTO;
-import net.kdigital.web_project.service.CustomerItemService;
 import net.kdigital.web_project.user.UserService;
 import net.kdigital.web_project.user.domain.User;
+import net.kdigital.web_project.userItem.domain.UserItem;
+import net.kdigital.web_project.userItem.service.UserItemService;
 
 @Controller
 @Slf4j
+@Builder
 @RequiredArgsConstructor
 public class UserController {
-	public final UserService customerService;
-	public final CustomerItemService customerItemService;
+	public final UserService userService;
+	public final UserItemService userItemService;
 	private final OpenApiManager openApiManager;
 
 	// 회원가입 화면 요청
@@ -35,11 +36,11 @@ public class UserController {
 
 	// 회원 저장
 	@PostMapping("/user/joinProc")
-	public String joinProc(@ModelAttribute User customerDTO, @ModelAttribute CustomerItemDTO customerItemDTO) {
+	public String joinProc(@ModelAttribute User customerDTO, @ModelAttribute UserItem customerItemDTO) {
 
 		log.info("============{}", customerDTO);
-		customerService.joinProc(customerDTO);
-		customerItemService.insertItem(customerItemDTO);
+		userService.joinProc(customerDTO);
+		userItemService.insertItem(customerItemDTO);
 		log.info("============가입됨");
 		return "redirect:/";
 	}
@@ -82,8 +83,12 @@ public class UserController {
 	@PostMapping("/user/confirmId")
 	@ResponseBody
 	public boolean confirmId(@RequestParam(name = "userId") String userId) {
-		boolean confirmId = customerService.findByUserId(userId);
-
+		boolean confirmId = true;
+		try {
+			userService.findById(userId);
+		} catch (Exception e) {
+			return confirmId;
+		}
 		return !confirmId;
 	}
 

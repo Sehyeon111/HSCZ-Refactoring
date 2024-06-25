@@ -16,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.kdigital.web_project.dto.AnswerDTO;
 import net.kdigital.web_project.dto.BoardDTO;
-import net.kdigital.web_project.dto.CustomerItemDTO;
 import net.kdigital.web_project.entity.BoardEntity;
 import net.kdigital.web_project.service.CCAService;
-import net.kdigital.web_project.service.CustomerItemService;
 import net.kdigital.web_project.service.ReplyService;
 import net.kdigital.web_project.user.UserService;
 import net.kdigital.web_project.user.domain.User;
+import net.kdigital.web_project.userItem.domain.UserItem;
+import net.kdigital.web_project.userItem.service.UserItemService;
 
 @RequiredArgsConstructor
 @Controller
@@ -33,7 +33,7 @@ public class MypageController {
 	public final UserService customerService;
 	public final CCAService ccaService;
 	public final ReplyService replyService;
-	public final CustomerItemService customerItemService;
+	public final UserItemService customerItemService;
 	public int boardCount;
 	public int replyCount;
 
@@ -48,7 +48,7 @@ public class MypageController {
 		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
 
 		// 유저 아이템 정보 가져오기
-		CustomerItemDTO customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = customerItemService.findItem(username);
 
 		// 로그인한 유저가 작성한 글 리스트로 가져오기
 		List<BoardEntity> boardEntityList = ccaService.findAllConsultsbyuserId(username);
@@ -84,7 +84,7 @@ public class MypageController {
 		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
 
 		// 유저 아이템 정보 가져오기
-		CustomerItemDTO customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = customerItemService.findItem(username);
 
 		// 유저가 쓴 댓글 정보 가져오기
 		List<AnswerDTO> replyDTOList = replyService.selectAllReplysByUsername(username);
@@ -122,7 +122,7 @@ public class MypageController {
 		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
 
 		// 유저 아이템 정보 가져오기
-		CustomerItemDTO customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = customerItemService.findItem(username);
 
 		// 로그인한 유저가 작성한 글 가져오기
 		List<BoardEntity> boardEntityList = ccaService.findAllConsultsbyuserId(username);
@@ -161,7 +161,7 @@ public class MypageController {
 		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
 
 		// 유저 아이템 정보 가져오기
-		CustomerItemDTO customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = customerItemService.findItem(username);
 
 		// 유저가 쓴 댓글 정보 가져오기
 		List<AnswerDTO> replyDTOList = replyService.selectAllReplysByUsername(username);
@@ -190,14 +190,14 @@ public class MypageController {
 	}
 
 	@PostMapping("/updateUser")
-	public String updateUser(@ModelAttribute User updateUser, @ModelAttribute CustomerItemDTO customerItemDTO) {
+	public String updateUser(@ModelAttribute User updateUser, @ModelAttribute UserItem customerItemDTO) {
 
 		// 로그인한 유저 정보 가져오기
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 
 		// 유저 아이템 업데이트
-		CustomerItemDTO updatedCustomerItemDTO = customerItemService.updateItem(username, customerItemDTO);
+		UserItem updatedCustomerItemDTO = customerItemService.updateItem(username, customerItemDTO);
 
 		// 유저 정보 업데이트
 		User updatedCustomerDTO = customerService.updateUser(username, updateUser);
@@ -206,13 +206,13 @@ public class MypageController {
 	}
 
 	@PostMapping("/updateCCA")
-	public String updateCCA(@ModelAttribute User customerDTO, @ModelAttribute CustomerItemDTO customerItemDTO) {
+	public String updateCCA(@ModelAttribute User customerDTO, @ModelAttribute UserItem customerItemDTO) {
 		// 로그인한 유저 정보 가져오기
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 
 		// 유저 정보 업데이트
-		CustomerItemDTO updatedCustomerItemDTO = customerItemService.updateItem(username, customerItemDTO);
+		UserItem updatedCustomerItemDTO = customerItemService.updateItem(username, customerItemDTO);
 
 		// 유저 아이템 업데이트
 		User updatedCustomerDTO = customerService.updateUser(username, customerDTO);
