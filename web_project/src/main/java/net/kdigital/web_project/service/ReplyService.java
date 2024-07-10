@@ -11,17 +11,17 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.kdigital.web_project.board.infrastructure.BoardEntity;
+import net.kdigital.web_project.board.infrastructure.BoardJpaRepository;
 import net.kdigital.web_project.dto.AnswerDTO;
 import net.kdigital.web_project.entity.AnswerEntity;
-import net.kdigital.web_project.entity.BoardEntity;
 import net.kdigital.web_project.repository.AnswerRepository;
-import net.kdigital.web_project.repository.CCARepository;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ReplyService {
-    private final CCARepository ccaRepository;
+    private final BoardJpaRepository ccaRepository;
     private final AnswerRepository answerRepository;
 
     public AnswerDTO insertAnswer(AnswerDTO answerDTO) {

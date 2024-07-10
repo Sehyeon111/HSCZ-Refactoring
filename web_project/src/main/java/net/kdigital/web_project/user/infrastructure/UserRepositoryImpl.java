@@ -6,11 +6,11 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
-// import net.kdigital.web_project.common.domain.exception.ResouceNotFoundException;
 import net.kdigital.web_project.user.domain.User;
 import net.kdigital.web_project.user.service.port.UserRepository;
 
@@ -58,6 +58,11 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.findTop3ByLikeTotal().stream()
                 .map(entity -> entity.toModel()).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public Page<User> findAllCCAByRegion(String searchItem, String searchWord, PageRequest of) {
+        return userJpaRepository.findAllCCAByRegion(searchItem, searchWord, of).map(entity -> entity.toModel());
     }
 
 }

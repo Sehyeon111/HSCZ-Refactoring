@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-public class userServiceTest {
+public class UserServiceTest {
     private UserService userService;
 
     @BeforeEach

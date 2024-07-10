@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +29,10 @@ import net.kdigital.web_project.user.service.port.UserRepository;
 @Service
 @Builder
 @RequiredArgsConstructor
-@Slf4j
 public class UserService {
+
+	@Value("${user.board.pageLimit}")
+	public final int pageLimit;
 
 	// public final CustomerLikeRepository customerLikeRepository;
 	// public final AnswerRepository answerRepository;
@@ -117,6 +122,18 @@ public class UserService {
 	public List<User> selectTop3CCA() {
 		List<User> ccaList = userRepository.findTop3ByLikeTotal();
 
+		return ccaList;
+	}
+
+	// Test 필요
+	public Page<User> findAllCCABySearch(Pageable pageable, String searchItem, String searchWord) {
+
+		int page = pageable.getPageNumber() - 1;
+
+		Page<User> ccaList = userRepository.findAllCCAByRegion(
+				searchItem,
+				searchWord,
+				PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "cca_num")));
 		return ccaList;
 	}
 

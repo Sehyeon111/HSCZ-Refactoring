@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.mapping.Collection;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import net.kdigital.web_project.user.domain.User;
@@ -40,6 +41,7 @@ public class FakeUserRepository implements UserRepository {
         if (getUser.isEmpty()) {
             list.add(user);
         } else {
+
             list.removeIf(item -> Objects.equals(item.getUserId(), user.getUserId()));
             list.add(user);
         }
@@ -58,6 +60,12 @@ public class FakeUserRepository implements UserRepository {
         Collections.sort(ccaList, (o1, o2) -> o2.getLikeTotal() - o1.getLikeTotal());
 
         return ccaList.subList(0, Math.min(3, ccaList.size()));
+    }
+
+    @Override
+    public Page<User> findAllCCAByRegion(String searchItem, String searchWord, PageRequest of) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllCCAByRegion'");
     }
 
 }

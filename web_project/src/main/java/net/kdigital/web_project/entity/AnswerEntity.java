@@ -22,6 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import net.kdigital.web_project.board.infrastructure.BoardEntity;
 import net.kdigital.web_project.dto.AnswerDTO;
 
 @AllArgsConstructor
@@ -31,49 +32,40 @@ import net.kdigital.web_project.dto.AnswerDTO;
 @ToString
 @Builder
 @Entity
-@Table(name="REPLY_CCA")
+@Table(name = "REPLY_CCA")
 public class AnswerEntity {
-	@SequenceGenerator(
-		name="cca_seq"
-		, sequenceName="cca_seq"
-		, initialValue = 1
-		, allocationSize = 1
-	)
-	
+	@SequenceGenerator(name = "cca_seq", sequenceName = "cca_seq", initialValue = 1, allocationSize = 1)
+
 	@Id
-	@GeneratedValue(generator="cca_seq")
-	@Column(name="reply_num")
+	@GeneratedValue(generator = "cca_seq")
+	@Column(name = "reply_num")
 	private Long replyNum;
-	
-	@Column(name="reply_writer")
+
+	@Column(name = "reply_writer")
 	private String replyWriter;
-	
-	@Column(name="reply_content")
+
+	@Column(name = "reply_content")
 	private String replyContent;
-	
-	@Column(name="reply_date")
+
+	@Column(name = "reply_date")
 	@CreationTimestamp
 	private LocalDateTime replyDate;
-	@Column(name="like_count")
+	@Column(name = "like_count")
 	private int likeCount;
-	/* Board : Reply = 1 : 다
+	/*
+	 * Board : Reply = 1 : 다
 	 * 댓글이 일대다에서 다의 위치, 조인컬럼은 BoardEntity 객체의 boardNum
-	 * 부모가 객체로 선어되어 있어야하고, 관계를 맺을때 @ManyToOne로 설정
+	 * 부모가 객체로 선언되어 있어야하고, 관계를 맺을때 @ManyToOne로 설정
 	 */
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="consult_num")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "consult_num")
 	private BoardEntity boardEntity;
 
 	/* CusomterLikeEntity와의 관계설정 */
-	@OneToMany(
-		mappedBy = "replyEntity"
-			, cascade = CascadeType.REMOVE
-			, orphanRemoval = true
-			, fetch = FetchType.LAZY 
-	)
+	@OneToMany(mappedBy = "replyEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("user_like_id desc")
-	
+
 	public static AnswerEntity toEntity(AnswerDTO answerDTO, BoardEntity boardEntity) {
 		return AnswerEntity.builder()
 				.replyNum(answerDTO.getReplyNum())
@@ -85,8 +77,3 @@ public class AnswerEntity {
 				.build();
 	}
 }
-
-
-
-
-

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.kdigital.web_project.board.domain.Board;
+import net.kdigital.web_project.board.infrastructure.BoardEntity;
+import net.kdigital.web_project.board.service.BoardService;
 import net.kdigital.web_project.dto.AnswerDTO;
-import net.kdigital.web_project.dto.BoardDTO;
-import net.kdigital.web_project.entity.BoardEntity;
-import net.kdigital.web_project.service.CCAService;
 import net.kdigital.web_project.service.ReplyService;
 import net.kdigital.web_project.user.UserService;
 import net.kdigital.web_project.user.domain.User;
@@ -30,10 +30,10 @@ import net.kdigital.web_project.userItem.service.UserItemService;
 @RequestMapping("/my")
 public class MypageController {
 
-	public final UserService customerService;
-	public final CCAService ccaService;
+	public final UserService userService;
+	public final BoardService boardService;
 	public final ReplyService replyService;
-	public final UserItemService customerItemService;
+	public final UserItemService userItemService;
 	public int boardCount;
 	public int replyCount;
 
@@ -45,22 +45,22 @@ public class MypageController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 
-		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
+		User customerDTO = userService.findById(username);
 
 		// 유저 아이템 정보 가져오기
-		UserItem customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = userItemService.findItem(username);
 
 		// 로그인한 유저가 작성한 글 리스트로 가져오기
-		List<BoardEntity> boardEntityList = ccaService.findAllConsultsbyuserId(username);
+		List<Board> boardList = boardService.findAllConsultsbyuserId(username);
 
 		// 상담글과 해당 글에 해당하는 댓글 갯수 map에 저장
-		Map<BoardDTO, Integer> dataMap = new HashMap<>();
+		Map<Board, Integer> dataMap = new HashMap<>();
 
 		for (BoardEntity temp : boardEntityList) {
 			// 작성한 글에 해당하는 댓글 가져오기
 			List<AnswerDTO> replyDTOList = replyService.selectAllReplys(temp.getConsultNum());
 
-			dataMap.put(BoardDTO.toDTO(temp), replyDTOList.size());
+			dataMap.put(Board.toDTO(temp), replyDTOList.size());
 
 			boardCount += 1;
 		}
@@ -81,21 +81,21 @@ public class MypageController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 
-		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
+		User customerDTO = userService.findById(username);
 
 		// 유저 아이템 정보 가져오기
-		UserItem customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = userItemService.findItem(username);
 
 		// 유저가 쓴 댓글 정보 가져오기
 		List<AnswerDTO> replyDTOList = replyService.selectAllReplysByUsername(username);
 
 		// 댓글과 그 댓글에 해당하는 상담글 정보 map에 저장
-		Map<AnswerDTO, BoardDTO> dataMap = new HashMap<>();
+		Map<AnswerDTO, Board> dataMap = new HashMap<>();
 
 		for (AnswerDTO answerDTO : replyDTOList) {
 
 			// 댓글에 해당하는 글정보 가져오기
-			BoardDTO boardDTO = ccaService.findByConsultNum(answerDTO.getConsultNum());
+			Board boardDTO = ccaService.findById(answerDTO.getConsultNum());
 
 			dataMap.put(answerDTO, boardDTO);
 
@@ -119,17 +119,17 @@ public class MypageController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 
-		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
+		User customerDTO = userService.findById(username);
 
 		// 유저 아이템 정보 가져오기
-		UserItem customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = userItemService.findItem(username);
 
 		// 로그인한 유저가 작성한 글 가져오기
-		List<BoardEntity> boardEntityList = ccaService.findAllConsultsbyuserId(username);
+		List<Boardy> boardyList = userService.findAllConsultsbyuserId(username);
 
 		log.info("{}", boardEntityList);
 
-		Map<BoardDTO, Integer> dataMap = new HashMap<>();
+		Map<Board, Integer> dataMap = new HashMap<>();
 
 		for (BoardEntity temp : boardEntityList) {
 			// 작성한 글에 해당하는 댓글 가져오기
@@ -137,7 +137,7 @@ public class MypageController {
 
 			log.info("{}", replyDTOList.size());
 
-			dataMap.put(BoardDTO.toDTO(temp), replyDTOList.size());
+			dataMap.put(Board.toDTO(temp), replyDTOList.size());
 			boardCount += 1;
 		}
 
@@ -158,20 +158,20 @@ public class MypageController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 
-		User customerDTO = User.toDTO(customerService.findCustomerByUserId(username));
+		User customerDTO = userService.findById(username);
 
 		// 유저 아이템 정보 가져오기
-		UserItem customerItemDTO = customerItemService.findItem(username);
+		UserItem customerItemDTO = userItemService.findItem(username);
 
 		// 유저가 쓴 댓글 정보 가져오기
 		List<AnswerDTO> replyDTOList = replyService.selectAllReplysByUsername(username);
 
-		Map<AnswerDTO, BoardDTO> dataMap = new HashMap<>();
+		Map<AnswerDTO, Board> dataMap = new HashMap<>();
 
 		for (AnswerDTO answerDTO : replyDTOList) {
 
 			// 댓글에 해당하는 글정보 가져오기
-			BoardDTO boardDTO = ccaService.findByConsultNum(answerDTO.getConsultNum());
+			Board boardDTO = ccaService.findById(answerDTO.getConsultNum());
 
 			dataMap.put(answerDTO, boardDTO);
 
@@ -197,10 +197,10 @@ public class MypageController {
 		String username = ((UserDetails) principal).getUsername();
 
 		// 유저 아이템 업데이트
-		UserItem updatedCustomerItemDTO = customerItemService.updateItem(username, customerItemDTO);
+		UserItem updatedCustomerItemDTO = userItemService.updateItem(username, customerItemDTO);
 
 		// 유저 정보 업데이트
-		User updatedCustomerDTO = customerService.updateUser(username, updateUser);
+		User updatedCustomerDTO = userService.updateUser(username, updateUser);
 
 		return "redirect:/my/userpage";
 	}
@@ -212,10 +212,10 @@ public class MypageController {
 		String username = ((UserDetails) principal).getUsername();
 
 		// 유저 정보 업데이트
-		UserItem updatedCustomerItemDTO = customerItemService.updateItem(username, customerItemDTO);
+		UserItem updatedCustomerItemDTO = userItemService.updateItem(username, customerItemDTO);
 
 		// 유저 아이템 업데이트
-		User updatedCustomerDTO = customerService.updateUser(username, customerDTO);
+		User updatedCustomerDTO = userService.updateUser(username, customerDTO);
 
 		log.info("{}", updatedCustomerDTO);
 		log.info("{}", updatedCustomerItemDTO);

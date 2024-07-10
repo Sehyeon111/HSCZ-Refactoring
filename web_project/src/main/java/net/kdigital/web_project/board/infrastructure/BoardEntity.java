@@ -1,8 +1,6 @@
-package net.kdigital.web_project.entity;
+package net.kdigital.web_project.board.infrastructure;
 
 import java.time.LocalDateTime;
-
-
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -22,8 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.kdigital.web_project.dto.BoardDTO;
-
+import net.kdigital.web_project.board.domain.Board;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,54 +30,45 @@ import net.kdigital.web_project.dto.BoardDTO;
 @Builder
 
 @Entity
-@Table(name="CONSULT_CCA") 
+@Table(name = "CONSULT_CCA")
 public class BoardEntity {
-	@SequenceGenerator(
-		name="consult_seq"
-		, sequenceName = "consult_seq"
-		, initialValue = 1
-		, allocationSize = 1
-	)
-	
+	@SequenceGenerator(name = "consult_seq", sequenceName = "consult_seq", initialValue = 1, allocationSize = 1)
+
 	@Id
 	@GeneratedValue(generator = "consult_seq")
-	@Column(name="consult_num")
+	@Column(name = "consult_num")
 	private Long consultNum;
-	
-	@Column(name="consult_writer", nullable=false)
+
+	@Column(name = "consult_writer", nullable = false)
 	private String consultWriter;
-	
-	@Column(name="consult_title")
+
+	@Column(name = "consult_title")
 	private String consultTitle;
-	
-	@Column(name="consult_content")
+
+	@Column(name = "consult_content")
 	private String consultContent;
-	
-	@Column(name="consult_date")
-	@CreationTimestamp		// 게시글이 처음 생성될 때 자동으로 날짜 세팅
+
+	@Column(name = "consult_date")
+	@CreationTimestamp // 게시글이 처음 생성될 때 자동으로 날짜 세팅
 	private LocalDateTime consultDate;
-	
-	@Column(name="product_category")
+
+	@Column(name = "product_category")
 	private String productCategory;
-	
-	@Column(name="product_hscode")
+
+	@Column(name = "product_hscode")
 	private String productHscode;
+
 	/*
 	 * 댓글과의 관계설정
 	 * mappedBy: one에 해당하는 테이블 엔티티
 	 * CascadeType.REMOVE 이 값으로 on delete cascade를 설정
 	 * fetch : LAZY는 지연호출, EAGER: 즉시 호출
 	 */
-	@OneToMany(mappedBy = "boardEntity", 
-			cascade = CascadeType.REMOVE,
-			orphanRemoval = true,
-			fetch = FetchType.LAZY
-			)
+	@OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("reply_num asc")
-	
-	
+
 	// DTO를 전달받아 Entity 로 반환
-	public static BoardEntity toEntity(BoardDTO boardDTO) {
+	public static BoardEntity from(Board boardDTO) {
 		return BoardEntity.builder()
 				.consultNum(boardDTO.getConsultNum())
 				.consultWriter(boardDTO.getConsultWriter())
@@ -89,6 +77,19 @@ public class BoardEntity {
 				.consultDate(boardDTO.getConsultDate())
 				.productCategory(boardDTO.getProductCategory())
 				.productHscode(boardDTO.getProductHscode())
+				.build();
+	}
+
+	// Entity 받아서 --> DTO 반환
+	public Board toModel() {
+		return Board.builder()
+				.consultNum(this.getConsultNum())
+				.consultWriter(this.getConsultWriter())
+				.consultTitle(this.getConsultTitle())
+				.consultContent(this.getConsultContent())
+				.consultDate(this.getConsultDate()) // 수정된 부분
+				.productCategory(this.getProductCategory()) // 추가된 부분
+				.productHscode(this.getProductHscode()) // 세율정보페이지에서 연결될때 HScode 가져옴
 				.build();
 	}
 }

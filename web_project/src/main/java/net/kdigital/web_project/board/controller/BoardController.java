@@ -1,4 +1,4 @@
-package net.kdigital.web_project.controller;
+package net.kdigital.web_project.board.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,13 +22,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import net.kdigital.web_project.board.domain.Board;
+import net.kdigital.web_project.board.service.BoardService;
 import net.kdigital.web_project.dto.AnswerDTO;
-import net.kdigital.web_project.dto.BoardDTO;
-import net.kdigital.web_project.dto.CCAListDTO;
-import net.kdigital.web_project.service.CCAListService;
-import net.kdigital.web_project.service.CCAService;
 import net.kdigital.web_project.service.ReplyService;
 import net.kdigital.web_project.user.UserService;
+import net.kdigital.web_project.user.domain.User;
 import net.kdigital.web_project.userItem.domain.UserItem;
 import net.kdigital.web_project.userItem.service.UserItemService;
 import net.kdigital.web_project.util.PageNavigator;
@@ -36,23 +35,22 @@ import net.kdigital.web_project.util.PageNavigator;
 @Slf4j
 @Controller
 @RequestMapping("/cca")
-public class CCAController {
-    private final CCAService ccaService;
+public class BoardController {
+    private final BoardService boardService;
     private final ReplyService replyService;
     private final int pageLimit; // 한 페이지에 보여줄 글의 개수
-    private final CCAListService ccaListService;
-    private final UserService customerService;
-    private final UserItemService customerItemService;
+    private final UserService userService;
+    private final UserItemService userItemService;
 
-    public CCAController(CCAService ccaService, ReplyService replyService,
-            @Value("${user.board.pageLimit}") int pageLimit, CCAListService ccaListService,
-            UserService customerService, UserItemService customerItemService) {
-        this.ccaService = ccaService;
+    public BoardController(
+            BoardService boardService, ReplyService replyService,
+            @Value("${user.board.pageLimit}") int pageLimit,
+            UserService userService, UserItemService userItemService) {
+        this.boardService = boardService;
         this.replyService = replyService;
         this.pageLimit = pageLimit;
-        this.ccaListService = ccaListService;
-        this.customerService = customerService;
-        this.customerItemService = customerItemService;
+        this.userService = userService;
+        this.userItemService = userItemService;
 
     }
 
@@ -72,9 +70,9 @@ public class CCAController {
             @RequestParam(name = "searchWord", defaultValue = "") String searchWord,
             Model model) {
 
-        Page<BoardDTO> dtoList;
+        Page<Board> dtoList;
 
-        dtoList = ccaService.findAllConsultsbySearch(pageable, searchWord, searchItem);
+        dtoList = boardService.findAllConsultsbySearch(pageable, searchWord, searchItem);
 
         int totalPages = dtoList.getTotalPages();
         int page = pageable.getPageNumber();
@@ -112,10 +110,10 @@ public class CCAController {
      * @return
      */
     @PostMapping("/ccaWrite")
-    public String ccaWrite(@ModelAttribute BoardDTO boardDTO) {
+    public String ccaWrite(@ModelAttribute Board boardDTO) {
         log.info("+++++++++++{}", boardDTO);
 
-        Long consultNum = ccaService.insertConsult(boardDTO);
+        Long consultNum = boardService.insertConsult(boardDTO);
 
         return "redirect:/cca/detail?consultNum=" + consultNum;
     }
@@ -138,16 +136,20 @@ public class CCAController {
             HttpServletRequest request,
             Model model) {
 
-        BoardDTO boardDTO = ccaService.selectOneConsult(consultNum);
+        Board board = null;
+        try {
+            board = boardService.findById(consultNum);
+        } catch (Exception e) {
+        }
         List<AnswerDTO> replyList = replyService.selectAllReplys(consultNum); // 예시일 뿐, 해당 메서드가 실제로 존재한다고 가정
 
         Map<AnswerDTO, UserItem> dataMap = new HashMap<>();
         for (AnswerDTO temp : replyList) {
-            UserItem customerItemDTO = customerItemService.findItem(temp.getReplyWriter());
-            dataMap.put(temp, customerItemDTO);
+            UserItem userItem = userItemService.findItem(temp.getReplyWriter());
+            dataMap.put(temp, userItem);
         }
 
-        model.addAttribute("consult", boardDTO);
+        model.addAttribute("consult", board);
         model.addAttribute("searchItem", searchItem);
         model.addAttribute("searchBy", searchBy);
         model.addAttribute("dataMap", dataMap);
@@ -172,7 +174,7 @@ public class CCAController {
             @RequestParam(name = "searchItem", defaultValue = "") String searchItem,
             RedirectAttributes rttr) {
 
-        ccaService.deleteOneConsult(consultNum);
+        boardService.deleteOneConsult(consultNum);
 
         rttr.addAttribute("searchItem", searchItem);
         rttr.addAttribute("searchBy", searchBy);
@@ -195,8 +197,8 @@ public class CCAController {
             @RequestParam(name = "searchItem", defaultValue = "") String searchItem,
             Model model) {
 
-        BoardDTO boardDTO = ccaService.selectOneConsult(consultNum);
-        model.addAttribute("consult", boardDTO);
+        Board board = boardService.findById(consultNum);
+        model.addAttribute("consult", board);
         model.addAttribute("searchItem", searchItem);
         model.addAttribute("searchBy", searchBy);
 
@@ -214,12 +216,12 @@ public class CCAController {
      */
     @PostMapping("/update")
     public String boardUpdate(
-            @ModelAttribute BoardDTO boardDTO,
+            @ModelAttribute Board boardDTO,
             @RequestParam(name = "searchBy", defaultValue = "") String searchBy,
             @RequestParam(name = "searchItem", defaultValue = "") String searchItem,
             RedirectAttributes rttr) {
 
-        ccaService.updateOneConsult(boardDTO);
+        boardService.updateOneConsult(boardDTO);
         rttr.addAttribute("consultNum", boardDTO.getConsultNum());
         rttr.addAttribute("searchItem", searchItem);
         rttr.addAttribute("searchBy", searchBy);
@@ -285,10 +287,10 @@ public class CCAController {
         System.out.println(consultNum);
         System.out.println(replyNum);
         AnswerDTO answerDTO = replyService.selectOneAnswer(replyNum, consultNum);
-        BoardDTO boardDTO = ccaService.selectOneConsult(consultNum);
+        Board board = boardService.findById(consultNum);
         System.out.println(answerDTO.toString());
         model.addAttribute("reply", answerDTO);
-        model.addAttribute("consult", boardDTO);
+        model.addAttribute("consult", board);
         model.addAttribute("searchItem", searchItem);
         model.addAttribute("searchBy", searchBy);
         return "cca/replyUpdate";
@@ -384,15 +386,17 @@ public class CCAController {
             @RequestParam(name = "searchItem", defaultValue = "") String searchItem,
             @RequestParam(name = "searchWord", defaultValue = "") String searchWord,
             Model model) {
-        Page<CCAListDTO> dtoList;
+        Page<User> ccaList;
 
-        dtoList = ccaListService.findAllCCABySearch(pageable, searchItem, searchWord);
+        // dtoList = ccaListService.findAllCCABySearch(pageable, searchItem,
+        // searchWord);
+        ccaList = userService.findAllCCABySearch(pageable, searchItem, searchWord);
 
-        int totalPages = (int) dtoList.getTotalPages();
+        int totalPages = (int) ccaList.getTotalPages();
         int page = pageable.getPageNumber();
         PageNavigator navi = new PageNavigator(pageLimit, page, totalPages);
-        log.info("관세사 리스트 : {}", dtoList);
-        model.addAttribute("ccaList", dtoList);
+        log.info("관세사 리스트 : {}", ccaList);
+        model.addAttribute("ccaList", ccaList);
         model.addAttribute("searchItem", searchItem);
         model.addAttribute("navi", navi);
         model.addAttribute("searchWord", searchWord);
@@ -423,11 +427,11 @@ public class CCAController {
 
         log.info("===================increaseLike 도착");
         // 사용자가 답변에 추천을 했는지 확인
-        boolean likeCheck = customerService.checkIsAlreadyLiked(replyNum, username);
+        boolean likeCheck = userService.checkIsAlreadyLiked(replyNum, username);
 
         if (likeCheck) {
             // customerLike 엔티티에 추가
-            customerService.insertCustomerLike(replyNum, username);
+            userService.insertCustomerLike(replyNum, username);
             log.info("============ customerLikeEntity에 추가됨");
 
             // reply_cca 엔티티의 like_count 증가
@@ -435,7 +439,7 @@ public class CCAController {
             log.info("============= likeCount 증가");
 
             // customer 엔티티의 like_total 증가
-            customerService.increaseTotalLike(replyWriter);
+            userService.increaseTotalLike(replyWriter);
             log.info("============= likeTotal 증가");
 
             return "redirect:/cca/detail?consultNum=" + consultNum;
